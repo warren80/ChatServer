@@ -5,6 +5,7 @@
 tmtags
 tags
 .DS_Store
+*.user
 *.swp
 *.o
 moc_*.cpp
