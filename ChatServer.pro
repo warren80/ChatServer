@@ -11,8 +11,13 @@ TEMPLATE = app
 
 
 SOURCES += main.cpp\
-        mainwindow.cpp
+        mainwindow.cpp \
+        textClient.cpp \
+        textServer.cpp
 
-HEADERS  += mainwindow.h
+
+HEADERS  += mainwindow.h \
+         += textClient.h \
+         += textServer.h \
 
 FORMS    += mainwindow.ui
