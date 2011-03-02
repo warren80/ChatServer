@@ -3,12 +3,20 @@
 
 #include <QObject>
 
+struct ClientConnect {
+    ClientConnect() :data(0) {}
+    int data;
+};
+
 class TextServer : public QObject {
     Q_OBJECT
 
 public:
     explicit TextServer();
     ~TextServer();
+public slots:
+signals:
+    void signalClientConnected(ClientConnect *);
 
 private:
 };

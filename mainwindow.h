@@ -2,6 +2,9 @@
 #define MAINWINDOW_H
 
 #include <QMainWindow>
+#include <QThread>
+#include "textClient.h"
+#include "textServer.h"
 
 namespace Ui {
     class MainWindow;
@@ -17,6 +20,11 @@ public:
 
 private:
     Ui::MainWindow *ui;
+    QThread * textClient;
+    QThread * textServer;
+public slots:
+    void slotClientConnected(ClientConnect *);
+    void slotTextRecieved(TextReceived *);
 };
 
 #endif // MAINWINDOW_H

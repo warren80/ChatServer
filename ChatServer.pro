@@ -18,6 +18,6 @@ SOURCES += main.cpp\
 
 HEADERS  += mainwindow.h \
          += textClient.h \
-         += textServer.h \
+         += textServer.h
 
 FORMS    += mainwindow.ui
