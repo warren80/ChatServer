@@ -23,7 +23,7 @@
    </size>
   </property>
   <property name="windowTitle">
-   <string>MainWindow</string>
+   <string>Los Ostrich</string>
   </property>
   <widget class="QWidget" name="centralWidget">
    <property name="minimumSize">
@@ -161,4 +161,3 @@ font-size: 10pt;</string>
  <resources/>
  <connections/>
 </ui>
-

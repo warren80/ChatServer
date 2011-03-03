@@ -61,3 +61,20 @@ void MainWindow::printF(QString message) {
 void MainWindow::on_actionExit_triggered() {
     close();
 }
+
+void MainWindow::on_actionConnect_triggered() {
+    Settings *settingsDiag = new Settings(this);
+
+    settingsDiag->exec();
+
+    settings = settingsDiag->getSettings();
+
+    if(settings->accepted) {
+        //TODO: Connect to server/Listen for clients
+    }
+}
+
+void MainWindow::closeEvent(QCloseEvent *) {
+    textServer->quit();
+    textClient->quit();
+}
