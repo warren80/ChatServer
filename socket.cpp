@@ -3,6 +3,8 @@
 #define TCP 1
 #define UDP 2
 
+/*
+
 int buflen;
 
 int i, maxi, nready, bytes_to_read, arg;
@@ -53,3 +55,4 @@ int Socket::createUDPSocket() {
     }
     return s;
 }
+*/

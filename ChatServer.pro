@@ -15,7 +15,7 @@ SOURCES += main.cpp\
         textClient.cpp \
         textServer.cpp \
     	socket.cpp \
-	    settings.cpp 
+        settings.cpp
 
 HEADERS  += mainwindow.h \
          += textClient.h \
@@ -24,4 +24,4 @@ HEADERS  += mainwindow.h \
          += settings.h \
 
 FORMS    += mainwindow.ui \
-         += settings.ui
+         settings.ui

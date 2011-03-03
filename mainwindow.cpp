@@ -7,7 +7,7 @@ MainWindow::MainWindow(QWidget *parent) :
 {
 
     //move these to be started when button pressed in gui
-    TextServer * ts = new TextServer();
+    TextServer * ts = new TextServer(7000);
     textServer = new QThread(this);
     textServer->start();
     connect(ts,SIGNAL(signalClientConnected(ClientConnect*)),
