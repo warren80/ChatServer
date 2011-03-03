@@ -23,6 +23,8 @@ MainWindow::MainWindow(QWidget *parent) :
     tc->moveToThread(textClient);
 
     ui->setupUi(this);
+
+    connect(ui->sendButton, SIGNAL(clicked()), this, SLOT(sendMessage()));
 }
 
 void MainWindow::slotClientConnected(ClientConnect*) {
@@ -36,4 +38,26 @@ void MainWindow::slotTextRecieved(TextReceived*) {
 MainWindow::~MainWindow()
 {
     delete ui;
+}
+
+void MainWindow::sendMessage() {
+    QString message = ui->typeScreen->toPlainText();
+
+    if(message != "") {
+        printF("Local:\n    " + message + "\n");
+    }
+
+    ui->typeScreen->clear();
+}
+
+void MainWindow::printF(const char *message) {
+    ui->chatScreen->appendPlainText(QString(*message));
+}
+
+void MainWindow::printF(QString message) {
+    ui->chatScreen->appendPlainText(message);
+}
+
+void MainWindow::on_actionExit_triggered() {
+    close();
 }
