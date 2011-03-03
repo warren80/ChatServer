@@ -16,9 +16,9 @@ TextServer::TextServer(int port) {
 TextServer::~TextServer() {
 }
 
-void TextServer::initTCPSocket() {
+//void TextServer::initTCPSocket() {
 
-}
+//}
 
 
 
@@ -27,7 +27,7 @@ void TextServer::initTCPSocket() {
 //#define TRUE	1
 //#define LISTENQ	5
 //#define MAXLINE 4096
-
+/*
 // Function Prototypes
 static void SystemFatal(const char* );
 
@@ -132,4 +132,4 @@ static void SystemFatal(const char* message)
 {
     perror (message);
     exit (EXIT_FAILURE);
-}
+}*/

@@ -12,7 +12,7 @@ class TextServer : public QObject {
     Q_OBJECT
 
 public:
-    explicit TextServer();
+    explicit TextServer(int port);
     ~TextServer();
 public slots:
 signals:

@@ -4,10 +4,10 @@
 class Socket
 {
 public:
-    Socket();
+    //Socket();
 private:
-    int createTCPSocket();
-    int createUDPSocket();
+    //int createTCPSocket();
+    //int createUDPSocket();
 };
 
 #endif // SOCKET_H
