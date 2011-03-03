@@ -44,6 +44,11 @@ void Settings::cancelSettings() {
     settings->accepted = false;
 }
 
+void Settings::closeEvent(QCloseEvent *) {
+    settings = (PSETTINGS)malloc(sizeof(SETTINGS));
+    settings->accepted = false;
+}
+
 PSETTINGS Settings::getSettings() {
     return settings;
 }

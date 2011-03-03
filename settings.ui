@@ -51,7 +51,7 @@ padding-right: 2px;</string>
     <set>Qt::ImhNone</set>
    </property>
    <property name="text">
-    <string/>
+    <string>8001</string>
    </property>
    <property name="frame">
     <bool>true</bool>
@@ -167,6 +167,9 @@ padding-right: 2px;</string>
      <width>261</width>
      <height>221</height>
     </rect>
+   </property>
+   <property name="styleSheet">
+    <string notr="true">background: url(./ostrichSettingsBG.png);</string>
    </property>
   </widget>
  </widget>

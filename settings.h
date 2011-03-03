@@ -3,7 +3,8 @@
 
 #include <QDialog>
 
-typedef struct {
+typedef struct ConnSettings {
+    ConnSettings():port(0), isClient(false), accepted(false){}
     QString ipAddr;
     int port;
     bool isClient;
@@ -22,6 +23,9 @@ public:
     explicit Settings(QWidget *parent = 0);
     ~Settings();
     PSETTINGS getSettings();
+
+protected:
+    void closeEvent(QCloseEvent *);
 
 private:
     Ui::Settings *ui;

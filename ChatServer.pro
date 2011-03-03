@@ -22,6 +22,7 @@ HEADERS  += mainwindow.h \
          += textServer.h \
     	 += socket.h \
          += settings.h \
+    includes.h
 
 FORMS    += mainwindow.ui \
          settings.ui

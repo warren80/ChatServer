@@ -2,6 +2,7 @@
 #define TEXTCLIENT_H
 
 #include <QObject>
+#include "includes.h"
 
 struct TextReceived {
     TextReceived() :data(0) {}
