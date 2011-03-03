@@ -10,7 +10,8 @@ Settings::Settings(QWidget *parent) :
     ui->setupUi(this);
 
     QButtonGroup serviceGroup(ui->serviceBox);
-    QValidator *valid = new QRegExpValidator(QRegExp("^[0-9]*$"), this);
+    QValidator *validPort = new QRegExpValidator(QRegExp("^\\d*$"), this);
+    QValidator *validIp = new QRegExpValidator(QRegExp("^\\d{1,3}\\.\\d{1,3}\\.\\d{1,3}\\.\\d{1,3}$"), this);
 
     serviceGroup.addButton(ui->clientButton);
     serviceGroup.addButton(ui->serverButton);
@@ -19,7 +20,8 @@ Settings::Settings(QWidget *parent) :
     connect(ui->okCancel, SIGNAL(rejected()), this, SLOT(cancelSettings()));
     connect(ui->clientButton, SIGNAL(toggled(bool)), this, SLOT(enableDisableClient(bool)));
 
-    ui->portText->setValidator(valid);
+    ui->portText->setValidator(validPort);
+    ui->ipText->setValidator(validIp);
 }
 
 Settings::~Settings() {

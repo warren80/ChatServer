@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>241</width>
+    <width>499</width>
     <height>219</height>
    </rect>
   </property>
@@ -14,7 +14,7 @@
    <string>Settings</string>
   </property>
   <property name="styleSheet">
-   <string notr="true">background-image: url(./ostrich.jpg);</string>
+   <string notr="true"/>
   </property>
   <widget class="QDialogButtonBox" name="okCancel">
    <property name="geometry">
@@ -35,9 +35,9 @@
   <widget class="QLineEdit" name="portText">
    <property name="geometry">
     <rect>
-     <x>50</x>
+     <x>60</x>
      <y>10</y>
-     <width>181</width>
+     <width>171</width>
      <height>31</height>
     </rect>
    </property>
@@ -116,9 +116,6 @@ padding-right: 2px;</string>
      <string>Server</string>
     </property>
    </widget>
-   <zorder>clientButton</zorder>
-   <zorder>serverButton</zorder>
-   <zorder>okCancel</zorder>
   </widget>
   <widget class="QGroupBox" name="clientBox">
    <property name="geometry">
@@ -162,7 +159,24 @@ padding-right: 2px;</string>
     </property>
    </widget>
   </widget>
+  <widget class="QWidget" name="widget" native="true">
+   <property name="geometry">
+    <rect>
+     <x>240</x>
+     <y>0</y>
+     <width>261</width>
+     <height>221</height>
+    </rect>
+   </property>
+  </widget>
  </widget>
+ <tabstops>
+  <tabstop>portText</tabstop>
+  <tabstop>ipText</tabstop>
+  <tabstop>clientButton</tabstop>
+  <tabstop>serverButton</tabstop>
+  <tabstop>okCancel</tabstop>
+ </tabstops>
  <resources/>
  <connections>
   <connection>

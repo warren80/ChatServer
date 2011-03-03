@@ -64,11 +64,12 @@
      <cursorShape>IBeamCursor</cursorShape>
     </property>
     <property name="styleSheet">
-     <string notr="true">background: qlineargradient(spread:pad, x1:0.5, y1:1, x2:0.5, y2:0, stop:0 rgba(45, 35, 35, 109), stop:0.1 rgba(255, 255, 255, 255));
-font-size: 10pt;</string>
+     <string notr="true">background-color: rgba(255,255,255,75%);
+font-size: 10pt;
+color: black;</string>
     </property>
     <property name="frameShape">
-     <enum>QFrame::StyledPanel</enum>
+     <enum>QFrame::NoFrame</enum>
     </property>
     <property name="readOnly">
      <bool>true</bool>
@@ -93,6 +94,23 @@ font-size: 10pt;</string>
      <string notr="true">font-size: 10pt;</string>
     </property>
    </widget>
+   <widget class="QWidget" name="widget" native="true">
+    <property name="geometry">
+     <rect>
+      <x>-1</x>
+      <y>-1</y>
+      <width>301</width>
+      <height>341</height>
+     </rect>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">background: url(./ostrich.gif);</string>
+    </property>
+   </widget>
+   <zorder>widget</zorder>
+   <zorder>sendButton</zorder>
+   <zorder>chatScreen</zorder>
+   <zorder>typeScreen</zorder>
   </widget>
   <widget class="QMenuBar" name="menuBar">
    <property name="geometry">

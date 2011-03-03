@@ -75,6 +75,6 @@ void MainWindow::on_actionConnect_triggered() {
 }
 
 void MainWindow::closeEvent(QCloseEvent *) {
-    textServer->quit();
-    textClient->quit();
+    //textServer->quit();
+    //textClient->quit();
 }
