@@ -2,6 +2,8 @@
 #define TEXTSERVER_H
 
 #include <QObject>
+#include "includes.h"
+#include "socket.h"
 
 struct ClientConnect {
     ClientConnect() :data(0) {}
