@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>499</width>
-    <height>219</height>
+    <width>500</width>
+    <height>221</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -134,21 +134,50 @@ padding-right: 2px;</string>
      <rect>
       <x>10</x>
       <y>20</y>
-      <width>81</width>
+      <width>21</width>
       <height>17</height>
      </rect>
     </property>
     <property name="text">
-     <string>IP Address:</string>
+     <string>IP:</string>
     </property>
    </widget>
    <widget class="QLineEdit" name="ipText">
     <property name="geometry">
      <rect>
+      <x>40</x>
+      <y>20</y>
+      <width>161</width>
+      <height>21</height>
+     </rect>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">border: 2px solid gray;
+border-radius: 8px;
+padding-left: 2px;
+padding-right: 2px;</string>
+    </property>
+   </widget>
+   <widget class="QLabel" name="aliasLabel">
+    <property name="geometry">
+     <rect>
       <x>10</x>
-      <y>40</y>
-      <width>181</width>
-      <height>27</height>
+      <y>50</y>
+      <width>41</width>
+      <height>17</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>Alias:</string>
+    </property>
+   </widget>
+   <widget class="QLineEdit" name="aliasText">
+    <property name="geometry">
+     <rect>
+      <x>50</x>
+      <y>46</y>
+      <width>151</width>
+      <height>21</height>
      </rect>
     </property>
     <property name="styleSheet">

@@ -17,7 +17,6 @@ Settings::Settings(QWidget *parent) :
     serviceGroup.addButton(ui->serverButton);
 
     connect(ui->okCancel, SIGNAL(accepted()), this, SLOT(storeSettings()));
-    connect(ui->okCancel, SIGNAL(rejected()), this, SLOT(cancelSettings()));
     connect(ui->clientButton, SIGNAL(toggled(bool)), this, SLOT(enableDisableClient(bool)));
 
     ui->portText->setValidator(validPort);
@@ -29,24 +28,13 @@ Settings::~Settings() {
 }
 
 void Settings::storeSettings() {
-    settings = (PSETTINGS)malloc(sizeof(SETTINGS));
-    settings->accepted = true;
+    settings = new SETTINGS();
 
     settings->port = ui->portText->text().toInt();
 
     if((settings->isClient = ui->clientButton->isChecked())) {
         settings->ipAddr = ui->ipText->text();
     }
-}
-
-void Settings::cancelSettings() {
-    settings = (PSETTINGS)malloc(sizeof(SETTINGS));
-    settings->accepted = false;
-}
-
-void Settings::closeEvent(QCloseEvent *) {
-    settings = (PSETTINGS)malloc(sizeof(SETTINGS));
-    settings->accepted = false;
 }
 
 PSETTINGS Settings::getSettings() {

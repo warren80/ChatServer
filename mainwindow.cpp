@@ -8,6 +8,7 @@ MainWindow::MainWindow(QWidget *parent) :
     ui->setupUi(this);
 
     connect(ui->sendButton, SIGNAL(clicked()), this, SLOT(sendMessage()));
+    enableChat(false);
 }
 
 void MainWindow::slotClientConnected(ClientConnect*) {
@@ -27,7 +28,7 @@ void MainWindow::sendMessage() {
     QString message = ui->typeScreen->toPlainText();
 
     if(message != "") {
-        printF("Local:\n" + message + "\n");
+        printF(settings->alias + ":\n" + message + "\n");
     }
 
     ui->typeScreen->clear();
@@ -52,11 +53,16 @@ void MainWindow::on_actionConnect_triggered() {
 
     settings = settingsDiag->getSettings();
 
-    if(settings->accepted) {
+    if(settingsDiag->result()) {
         //TODO: Connect to server/Listen for clients
         if(settings->isClient) {
             //move these to be started when button pressed in gui
             qDebug("Client");
+            enableChat(true);
+
+            qDebug(settings->ipAddr.toLatin1().data());
+            qDebug(QString::number(settings->port).toLatin1().data());
+            qDebug(settings->alias.toLatin1().data());
 
             TextClient * tc = new TextClient();
             textClient = new QThread(this);
@@ -67,8 +73,11 @@ void MainWindow::on_actionConnect_triggered() {
         } else {
             //move these to be started when button pressed in gui
             qDebug("Server");
+            enableChat(false);
 
-            TextServer * ts = new TextServer(7000);
+            qDebug(QString::number(settings->port).toLatin1().data());
+
+            TextServer * ts = new TextServer(settings->port);
             textServer = new QThread(this);
             textServer->start();
             connect(ts,SIGNAL(signalClientConnected(ClientConnect*)),
@@ -80,7 +89,7 @@ void MainWindow::on_actionConnect_triggered() {
     }
 }
 
-void MainWindow::closeEvent(QCloseEvent *) {
-    //textServer->quit();
-    //textClient->quit();
+void MainWindow::enableChat(bool enable) {
+    ui->sendButton->setEnabled(enable);
+    ui->typeScreen->setEnabled(enable);
 }

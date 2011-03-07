@@ -41,10 +41,10 @@
    <widget class="QPushButton" name="sendButton">
     <property name="geometry">
      <rect>
-      <x>230</x>
-      <y>390</y>
+      <x>240</x>
+      <y>380</y>
       <width>61</width>
-      <height>21</height>
+      <height>41</height>
      </rect>
     </property>
     <property name="text">
@@ -57,7 +57,7 @@
       <x>0</x>
       <y>0</y>
       <width>301</width>
-      <height>341</height>
+      <height>381</height>
      </rect>
     </property>
     <property name="cursor" stdset="0">
@@ -82,8 +82,8 @@ color: black;</string>
     <property name="geometry">
      <rect>
       <x>0</x>
-      <y>340</y>
-      <width>301</width>
+      <y>380</y>
+      <width>241</width>
       <height>41</height>
      </rect>
     </property>
@@ -100,7 +100,7 @@ color: black;</string>
       <x>-1</x>
       <y>-1</y>
       <width>301</width>
-      <height>341</height>
+      <height>381</height>
      </rect>
     </property>
     <property name="styleSheet">

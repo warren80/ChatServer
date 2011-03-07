@@ -4,11 +4,11 @@
 #include <QDialog>
 
 typedef struct ConnSettings {
-    ConnSettings():port(0), isClient(false), accepted(false){}
+    ConnSettings():ipAddr("255.255.255.255"), alias("Local"), port(0), isClient(false){}
     QString ipAddr;
+    QString alias;
     int port;
     bool isClient;
-    bool accepted;
 } SETTINGS, *PSETTINGS;
 
 namespace Ui {
@@ -24,16 +24,12 @@ public:
     ~Settings();
     PSETTINGS getSettings();
 
-protected:
-    void closeEvent(QCloseEvent *);
-
 private:
     Ui::Settings *ui;
     PSETTINGS settings;
 
 private slots:
     void storeSettings();
-    void cancelSettings();
     void enableDisableClient(bool);
 };
 

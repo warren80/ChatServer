@@ -20,6 +20,7 @@ public:
     ~MainWindow();
     void printF(const char*);
     void printF(QString);
+    void enableChat(bool);
 
 private:
     Ui::MainWindow *ui;
@@ -30,9 +31,6 @@ private:
 public slots:
     void slotClientConnected(ClientConnect *);
     void slotTextRecieved(TextReceived *);
-
-protected slots:
-    void closeEvent(QCloseEvent *);
 
 private slots:
     void on_actionConnect_triggered();
