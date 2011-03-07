@@ -3,6 +3,7 @@
 
 #include <QObject>
 #include "includes.h"
+#include "socket.h"
 
 struct TextReceived {
     TextReceived() :data(0) {}
