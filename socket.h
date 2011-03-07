@@ -1,13 +1,21 @@
 #ifndef SOCKET_H
 #define SOCKET_H
 
+#include <stdio.h>
+#include <QDebug>
+#include <sys/types.h>
+#include <sys/socket.h>
+#include <netdb.h>
+
 class Socket
 {
 public:
-    Socket();
+    Socket(int type, int port);
+    int bindToPort(const char * str);
+    int socketDescriptor;
 private:
-    int createTCPSocket();
-    int createUDPSocket();
+    void createTCPSocket();
+    void createUDPSocket();
 };
 
 #endif // SOCKET_H
