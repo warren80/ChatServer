@@ -1,5 +1,6 @@
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
+#include <QDateTime>
 
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
@@ -28,7 +29,8 @@ void MainWindow::sendMessage() {
     QString message = ui->typeScreen->toPlainText();
 
     if(message != "") {
-        printF(settings->alias + ":\n" + message + "\n");
+        printF(settings->alias + ": " + QTime::currentTime().toString()
+               + "\n" + message + "\n");
     }
 
     ui->typeScreen->clear();
@@ -64,8 +66,11 @@ void MainWindow::on_actionConnect_triggered() {
             qDebug(QString::number(settings->port).toLatin1().data());
             qDebug(settings->alias.toLatin1().data());
 
-            TextClient * tc = new TextClient();
-            textClient = new QThread(this);
+            //TODO get a port from gui and ip just a hack here to make it compile
+            char ip = 'a';
+            int port = 1;
+            TextClient * tc = new TextClient(&ip, port);
+            textClient = new Thread();
             textClient->start();
             connect(tc,SIGNAL(signalTextRecieved(TextReceived*)),
                     this,SLOT(slotTextRecieved(TextReceived*)));
@@ -78,7 +83,7 @@ void MainWindow::on_actionConnect_triggered() {
             qDebug(QString::number(settings->port).toLatin1().data());
 
             TextServer * ts = new TextServer(settings->port);
-            textServer = new QThread(this);
+            textServer = new Thread();
             textServer->start();
             connect(ts,SIGNAL(signalClientConnected(ClientConnect*)),
                     this,SLOT(slotClientConnected(ClientConnect*)));

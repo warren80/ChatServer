@@ -15,14 +15,16 @@ SOURCES += main.cpp\
         textClient.cpp \
         textServer.cpp \
     	socket.cpp \
-        settings.cpp
+        settings.cpp \
+    thread.cpp
 
 HEADERS  += mainwindow.h \
          += textClient.h \
          += textServer.h \
     	 += socket.h \
          += settings.h \
-    includes.h
+    includes.h \
+    thread.h
 
 FORMS    += mainwindow.ui \
          settings.ui

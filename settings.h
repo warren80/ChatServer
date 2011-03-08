@@ -2,7 +2,14 @@
 #define SETTINGS_H
 
 #include <QDialog>
-#include "includes.h"
+
+typedef struct ConnSettings {
+    ConnSettings():ipAddr("255.255.255.255"), alias("Local"), port(0), isClient(false){}
+    QString ipAddr;
+    QString alias;
+    int port;
+    bool isClient;
+} SETTINGS, *PSETTINGS;
 
 namespace Ui {
     class Settings;

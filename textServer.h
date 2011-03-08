@@ -2,7 +2,6 @@
 #define TEXTSERVER_H
 
 #include <QObject>
-#include "includes.h"
 #include "socket.h"
 
 struct ClientConnect {
@@ -16,11 +15,15 @@ class TextServer : public QObject {
 public:
     explicit TextServer(int port);
     ~TextServer();
+    void Start();
 public slots:
+    void slotClientConnect(char *);
+    void slotClientDisconnect(char *);
 signals:
     void signalClientConnected(ClientConnect *);
 
 private:
+    Socket * pSocket;
 };
 
 #endif // TEXTSERVER

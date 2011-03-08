@@ -1,14 +1,23 @@
 #include "textClient.h"
 #include <QDebug>
 
-TextClient::TextClient() {
-    char * str = new char[3];
-    Socket *s = new Socket(TCP, 7503, 3);
-    s->SetAsClient("192.168.0.13");
-    qDebug ("%d", s->tx(QString("moo")));
-    s->rx(str);
-    qDebug("%3s", str);
+#define BUFSIZE 1024
+
+TextClient::TextClient(char* ip, int port) {
+    char * str = new char[BUFSIZE];
+    pSocket = new Socket(1, port, BUFSIZE);
+    //pSocket->rx(str);
+}
+
+void TextClient::Start() {
+   // pSocket->SetAsClient(ip);
 }
 
 TextClient::~TextClient() {
 }
+
+void TextClient::slotTextRecieved(char *) {
+
+}
+
+
