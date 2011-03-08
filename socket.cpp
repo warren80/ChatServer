@@ -225,16 +225,27 @@ int Socket::rx(char * str) {
         switch (socketType_) {
         case TCP:
             n = recv(socketDescriptor_, str, bytesToRead, 0);
+            if (n == -1) {
+                qDebug ("Rx(): recv");
+                return -1;
+            }
+            if (n == 0) {
+                return 0;
+            }
             break;
         case UDP:
             //n = recvfrom(socketDescriptor_, str, bytesToRead, 0, (struct sockaddr *) &server_, sizeof(server_));
             break;
         default:
-            qDebug("Socket(): invalid socket type");
+            qDebug("Rx(): invalid socket type");
             return -1;
         }
         bytesToRead -= n;
         str += n;
     }
     return n;
+}
+
+void Socket::closeSocket() {
+    close(socketDescriptor_);
 }

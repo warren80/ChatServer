@@ -9,13 +9,14 @@
 #include <unistd.h>
 
 
-TextServer::TextServer(int port) {
-    //code to init socket
+TextServer::TextServer(int port, int bufsize)
+    : Component(port, bufsize) {
+    pSocket = new Socket(TCP, port_, bufSize_);
 
 }
 
 void TextServer::Start() {
-    //code to start server
+    pSocket->SetAsServer();
 }
 
 TextServer::~TextServer() {

@@ -1,16 +1,27 @@
 #include "textClient.h"
 #include <QDebug>
 
-#define BUFSIZE 1024
-
-TextClient::TextClient(char* ip, int port) {
-    char * str = new char[BUFSIZE];
-    pSocket = new Socket(1, port, BUFSIZE);
-    //pSocket->rx(str);
+TextClient::TextClient(const char* ip, int port, int bufsize)
+    : Component(port, bufsize) {
+    pSocket = new Socket(TCP, port, bufsize);
+    ip_ = new char[sizeof(ip)];
+    strncpy(ip_,ip, sizeof(ip));
 }
 
 void TextClient::Start() {
+    pSocket->SetAsClient(ip_);
+    char * str = new char[bufSize_]; //may need +1 here not sure
+
+    while (pSocket->rx(str) > 0) {
+        //setup structure or something.
+        //emit signal
+    }
+    pSocket->closeSocket();
    // pSocket->SetAsClient(ip);
+}
+
+void TextClient::txMessage(const char * str) { //this function is in the gui thread and thats as planned
+    pSocket->tx(str);
 }
 
 TextClient::~TextClient() {

@@ -16,7 +16,8 @@ SOURCES += main.cpp\
         textServer.cpp \
     	socket.cpp \
         settings.cpp \
-    thread.cpp
+    thread.cpp \
+    component.cpp
 
 HEADERS  += mainwindow.h \
          += textClient.h \
@@ -24,7 +25,8 @@ HEADERS  += mainwindow.h \
     	 += socket.h \
          += settings.h \
     includes.h \
-    thread.h
+    thread.h \
+    component.h
 
 FORMS    += mainwindow.ui \
          settings.ui

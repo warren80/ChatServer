@@ -3,24 +3,27 @@
 
 #include <QObject>
 #include "socket.h"
+#include "component.h"
 
 struct TextReceived {
     TextReceived() :data(0) {}
     int data;
 };
 
-class TextClient : public QObject {
+class TextClient : public Component {
     Q_OBJECT
 
 public:
-    explicit TextClient(char* ip, int port);
+    TextClient(const char* ip, int port, int bufsize) ;
     ~TextClient();
-    void Start();
+    virtual void Start();
+    void txMessage(const char * str);
 public slots:
     void slotTextRecieved(char *);
 signals:
     void signalTextRecieved(TextReceived *);
 private:
+    char * ip_;
     Socket * pSocket;
 };
 

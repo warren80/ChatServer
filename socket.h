@@ -23,6 +23,7 @@ public:
     int tx(const QString str);
     int tx(const char * str, int length, int socketDescriptor);
     int rx(char * str);
+    void closeSocket();
 private:
     void createTCPSocket();
     void createUDPSocket();
