@@ -4,12 +4,14 @@
 TextClient::TextClient(const char* ip, int port, int bufsize)
     : Component(port, bufsize) {
     pSocket = new Socket(TCP, port, bufsize);
-    ip_ = new char[sizeof(ip)];
-    strncpy(ip_,ip, sizeof(ip));
+    ip_ = new char[16];
+    strncpy(ip_,ip, 16);
 }
 
 void TextClient::Start() {
+    qDebug("Client Started");
     pSocket->SetAsClient(ip_);
+    qDebug(ip_);
     char * str = new char[bufSize_]; //may need +1 here not sure
 
     while (pSocket->rx(str) > 0) {

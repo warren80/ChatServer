@@ -60,6 +60,7 @@ void MainWindow::on_actionConnect_triggered() {
         if(settings->isClient) {
             //move these to be started when button pressed in gui
             qDebug("Client");
+            setWindowTitle("Los Ostrich - Client");
             enableChat(true);
 
             qDebug(settings->ipAddr.toLatin1().data());
@@ -67,17 +68,18 @@ void MainWindow::on_actionConnect_triggered() {
             qDebug(settings->alias.toLatin1().data());
 
             //TODO get a port from gui and ip just a hack here to make it compile
-            char ip = 'a';
-            int port = 1;
-            TextClient * tc = new TextClient(&ip, port, BUFSIZE);
+            char *ip = settings->ipAddr.toLatin1().data();
+            TextClient * tc = new TextClient(ip, settings->port, BUFSIZE);
             textClient = new Thread();
             textClient->start();
             connect(tc,SIGNAL(signalTextRecieved(TextReceived*)),
                     this,SLOT(slotTextRecieved(TextReceived*)));
             tc->moveToThread(textClient);
+            connect(this, SIGNAL(startSignalClient()), tc, SLOT(Start()));
+            emit startSignalClient();
         } else {
-            //move these to be started when button pressed in gui
             qDebug("Server");
+            setWindowTitle("Los Ostrich - Server");
             enableChat(false);
 
             qDebug(QString::number(settings->port).toLatin1().data());
@@ -88,6 +90,8 @@ void MainWindow::on_actionConnect_triggered() {
             connect(ts,SIGNAL(signalClientConnected(ClientConnect*)),
                     this,SLOT(slotClientConnected(ClientConnect*)));
             ts->moveToThread(textServer);
+            connect(this, SIGNAL(startSignalServer()), ts, SLOT(Start()));
+            emit startSignalServer();
         }
     } else {
         qDebug("Settings Cancelled");

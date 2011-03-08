@@ -39,6 +39,10 @@ private slots:
     void on_actionConnect_triggered();
     void on_actionExit_triggered();
     void sendMessage();
+
+signals:
+    void startSignalClient();
+    void startSignalServer();
 };
 
 #endif // MAINWINDOW_H
