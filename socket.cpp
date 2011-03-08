@@ -153,7 +153,7 @@ int Socket::SetAsClient(const char * str) {
         }
         break;
     case TCP:
-        if (connect(socketDescriptor_, (struct sockaddr *) &server_, sizeof(server_)) == -1) {
+        if (::connect(socketDescriptor_, (struct sockaddr *) &server_, sizeof(server_)) == -1) {
             qDebug("SetAsClient(): failure to connect to port");
             return -1;
         }

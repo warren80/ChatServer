@@ -6,6 +6,7 @@
 #include "textClient.h"
 #include "textServer.h"
 #include "settings.h"
+#include "thread.h"
 
 namespace Ui {
     class MainWindow;
@@ -24,8 +25,8 @@ public:
 
 private:
     Ui::MainWindow *ui;
-    QThread * textClient;
-    QThread * textServer;
+    Thread * textClient;
+    Thread * textServer;
     PSETTINGS settings;
 
 public slots:
