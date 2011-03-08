@@ -3,22 +3,23 @@
 
 #include <QObject>
 #include "socket.h"
+#include "component.h"
 
 struct ClientConnect {
     ClientConnect() :data(0) {}
     int data;
 };
 
-class TextServer : public QObject {
+class TextServer : public Component {
     Q_OBJECT
 
 public:
-    explicit TextServer(int port);
+    TextServer(int port, int bufsize);
     ~TextServer();
-    void Start();
+    virtual void Start();
 public slots:
-    void slotClientConnect(char *);
-    void slotClientDisconnect(char *);
+    void slotClientConnect(char * str);
+    void slotClientDisconnect(char * str);
 signals:
     void signalClientConnected(ClientConnect *);
 

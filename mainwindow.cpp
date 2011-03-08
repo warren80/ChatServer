@@ -67,7 +67,7 @@ void MainWindow::on_actionConnect_triggered() {
             //TODO get a port from gui and ip just a hack here to make it compile
             char ip = 'a';
             int port = 1;
-            TextClient * tc = new TextClient(&ip, port);
+            TextClient * tc = new TextClient(&ip, port, BUFSIZE);
             textClient = new Thread();
             textClient->start();
             connect(tc,SIGNAL(signalTextRecieved(TextReceived*)),
@@ -80,7 +80,7 @@ void MainWindow::on_actionConnect_triggered() {
 
             qDebug(QString::number(settings->port).toLatin1().data());
 
-            TextServer * ts = new TextServer(settings->port);
+            TextServer * ts = new TextServer(settings->port, BUFSIZE);
             textServer = new Thread();
             textServer->start();
             connect(ts,SIGNAL(signalClientConnected(ClientConnect*)),
