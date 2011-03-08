@@ -2,7 +2,6 @@
 #define TEXTCLIENT_H
 
 #include <QObject>
-#include "includes.h"
 #include "socket.h"
 #include "component.h"
 
@@ -17,10 +16,10 @@ class TextClient : public Component {
 public:
     TextClient(const char* ip, int port, int bufsize) ;
     ~TextClient();
-    virtual void Start();
     void txMessage(const char * str);
 public slots:
     void slotTextRecieved(char *);
+    virtual void Start();
 signals:
     void signalTextRecieved(TextReceived *);
 private:

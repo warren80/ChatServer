@@ -20,7 +20,8 @@ public:
     int SetAsServer();
 
     int tx(const char * str, int length);
-    int tx(const QString str);  //only used in testing to be removed
+    int tx(const QString str);
+    int tx(const char * str, int length, int socketDescriptor);
     int rx(char * str);
     void closeSocket();
 private:

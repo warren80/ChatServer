@@ -16,10 +16,10 @@ class TextServer : public Component {
 public:
     TextServer(int port, int bufsize);
     ~TextServer();
-    virtual void Start();
 public slots:
     void slotClientConnect(char * str);
     void slotClientDisconnect(char * str);
+    virtual void Start();
 signals:
     void signalClientConnected(ClientConnect *);
 

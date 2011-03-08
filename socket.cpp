@@ -27,7 +27,7 @@ int Socket::SetAsServer() {
         qDebug("SetAsServer(): SetupSocket");
         return -1;
     }
-    TCPServer();
+    return TCPServer();
 }
 
 int Socket::TCPServer() {
@@ -50,7 +50,9 @@ int Socket::TCPServer() {
 
     for (i = 0; i < FD_SETSIZE; i++) {
         client[i] = -1;
+        Socket(TCP, sPort_, buflen_);
     }
+
     FD_ZERO(&allset);
     FD_SET(socketDescriptor_, &allset);
 
@@ -100,6 +102,11 @@ int Socket::TCPServer() {
                 //emit data to server probably have to copy this info for use in another thread
 
                 //write loop to all clients but this one
+                for(int j = 0; j < maxi; j++) {
+                    if(client[i] != -1) {
+                        tx(buffer, buflen_, client[i]);
+                    }
+                }
 
                 if (n == 0) //connection closed by client
                 {
@@ -117,7 +124,7 @@ int Socket::TCPServer() {
 }
 
 int Socket::UDPServer() {
-
+    return 1;
 }
 
 int Socket::SetupSocket(const char * str) {
@@ -127,7 +134,7 @@ int Socket::SetupSocket(const char * str) {
     server_.sin_port = htons(sPort_);
     if (str != 0) {
         if ((hp = gethostbyname(str)) == NULL) {
-            qDebug("SetupSocket(): getHostByName");
+            qDebug("SetupSocket(): getHostByName(): No such server available.");
             return -1;
         }
         bcopy(hp->h_addr, (char *) &server_.sin_addr, hp->h_length);
@@ -136,9 +143,9 @@ int Socket::SetupSocket(const char * str) {
         return 1;
     }
     client_.sin_family = AF_INET;
-    client_.sin_port = htons(0);
-    client_.sin_addr.s_addr = htonl(INADDR_ANY);
+    client_.sin_port = htons(sPort_);
 
+    return 1;
 }
 
 int Socket::SetAsClient(const char * str) {
@@ -197,7 +204,19 @@ int Socket::tx(const char * str, int length) {
 }
 
 int Socket::tx(const QString str) {
-    return tx(str.toLatin1(), str.length());
+    return tx(str.toLatin1().data(), str.length());
+}
+
+int Socket::tx(const char *str, int length, int socketDescriptor) {
+    switch (socketType_) {
+    case TCP:
+        return send(socketDescriptor, str, length, 0);
+    case UDP:
+        return sendto(socketDescriptor, str, length, 0, (struct sockaddr *) &server_, serverLength_);
+    default:
+        qDebug("Socket(): invalid socket type");
+        return -1;
+    }
 }
 
 int Socket::rx(char * str) {
@@ -209,7 +228,7 @@ int Socket::rx(char * str) {
         case TCP:
             n = recv(socketDescriptor_, str, bytesToRead, 0);
             if (n == -1) {
-                qDebug ("Rx(): recv");
+                qDebug ("Rx(): recv(): error");
                 return -1;
             }
             if (n == 0) {
