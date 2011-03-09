@@ -1,8 +1,8 @@
 /********************************************************************************
 ** Form generated from reading UI file 'settings.ui'
 **
-** Created: 
-**      by: Qt User Interface Compiler version 4.6.3
+** Created: Wed Mar 9 13:04:35 2011
+**      by: Qt User Interface Compiler version 4.7.0
 **
 ** WARNING! All changes made in this file will be lost when recompiling UI file!
 ********************************************************************************/
@@ -127,6 +127,7 @@ public:
         clientBox->setTitle(QApplication::translate("Settings", "Client Settings", 0, QApplication::UnicodeUTF8));
         ipLabel->setText(QApplication::translate("Settings", "IP:", 0, QApplication::UnicodeUTF8));
         aliasLabel->setText(QApplication::translate("Settings", "Alias:", 0, QApplication::UnicodeUTF8));
+        aliasText->setText(QApplication::translate("Settings", "Local", 0, QApplication::UnicodeUTF8));
     } // retranslateUi
 
 };

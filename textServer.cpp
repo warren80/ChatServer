@@ -11,12 +11,16 @@
 
 TextServer::TextServer(int port, int bufsize)
     : Component(port, bufsize) {
-    pSocket = new SocketClass(TCP, port_, bufSize_);
+    pSocket_ = new SocketClass(TCP, port_, bufSize_);
 
+    connect(pSocket_, SIGNAL(SignalClientConnected(char*)),
+            this, SLOT(slotClientConnect(char*)));
+    connect(pSocket_, SIGNAL(SignalClientDisconnected(char*)),
+            this, SLOT(slotClientDisconnect(char*)));
 }
 
 void TextServer::Start() {
-    if(pSocket->SetAsServer() == -1) {
+    if(pSocket_->SetAsServer() == -1) {
         emit connectionError("Cannot start server.");
     } else {
         emit success("Server started.");
@@ -24,10 +28,14 @@ void TextServer::Start() {
 }
 
 TextServer::~TextServer() {
+    delete pSocket_;
 }
 
-void TextServer::slotClientConnect(char *) {
+void TextServer::slotClientConnect(char *ipAddr) {
+    PCLIENTSPECS client = new CLIENTSPECS;
+    client->ipAddr = ipAddr;
 
+    emit signalClientConnected(client);
 }
 
 void TextServer::slotClientDisconnect(char *) {

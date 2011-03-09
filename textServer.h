@@ -5,10 +5,10 @@
 #include "socket.h"
 #include "component.h"
 
-struct ClientConnect {
-    ClientConnect() :data(0) {}
-    int data;
-};
+typedef struct ClientSpecs {
+    ClientSpecs():ipAddr(0){}
+    char *ipAddr;
+}CLIENTSPECS, *PCLIENTSPECS;
 
 class TextServer : public Component {
     Q_OBJECT
@@ -21,11 +21,12 @@ public slots:
     void slotClientDisconnect(char*);
     virtual void Start();
 signals:
-    void signalClientConnected(ClientConnect *);
-    void connectionError(const char *);
+    void signalClientDisconnected(PCLIENTSPECS);
+    void signalClientConnected(PCLIENTSPECS);
+    void connectionError(const char*);
 
 private:
-    SocketClass * pSocket;
+    SocketClass *pSocket_;
 };
 
 #endif // TEXTSERVER
