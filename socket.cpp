@@ -233,7 +233,7 @@ int SocketClass::tx(PMESSAGESTRUCT mesg, int length) {
 }
 
 int SocketClass::tx(PMESSAGESTRUCT mesg) {
-    return tx(mesg, sizeof(mesg));
+    return tx(mesg, sizeof(MESSAGESTRUCT));
 }
 
 int SocketClass::tx(PMESSAGESTRUCT mesg, int length, int socketDescriptor) {
