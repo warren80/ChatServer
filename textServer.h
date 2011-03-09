@@ -14,14 +14,15 @@ class TextServer : public Component {
     Q_OBJECT
 
 public:
-    TextServer(int port, int bufsize);
+    TextServer(int, int);
     ~TextServer();
 public slots:
-    void slotClientConnect(char * str);
-    void slotClientDisconnect(char * str);
+    void slotClientConnect(char*);
+    void slotClientDisconnect(char*);
     virtual void Start();
 signals:
     void signalClientConnected(ClientConnect *);
+    void connectionError(const char *);
 
 private:
     Socket * pSocket;

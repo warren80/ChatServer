@@ -15,21 +15,21 @@
 class Socket : public QObject {
     Q_OBJECT
 public:
-    Socket(int type, int port, int packetSize);
-    int SetAsClient(const char * str);
+    Socket(int, int, int);
+    int SetAsClient(const char*);
     int SetAsServer();
 
-    int tx(const char * str, int length);
+    int tx(const char*, int);
     int tx(const QString str);
-    int tx(const char * str, int length, int socketDescriptor);
-    int rx(char * str);
+    int tx(const char*, int, int);
+    int rx(char*);
     void closeSocket();
 private:
     void createTCPSocket();
     void createUDPSocket();
     int TCPServer();
     int UDPServer();
-    int SetupSocket(const char * str);
+    int SetupSocket(const char*);
 
     int buflen_;
     int socketType_;
@@ -39,8 +39,8 @@ private:
     int socketDescriptor_;
 
 signals:
-    void SignalClientConnected(char * client);
-    void SignalClientDisconnected(char * client);
+    void SignalClientConnected(char*);
+    void SignalClientDisconnected(char*);
 
 };
 

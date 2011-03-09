@@ -1,6 +1,7 @@
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
 #include <QDateTime>
+#include <QMessageBox>
 
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
@@ -29,8 +30,9 @@ void MainWindow::sendMessage() {
     QString message = ui->typeScreen->toPlainText();
 
     if(message != "") {
-        printF(settings->alias + ": " + QTime::currentTime().toString()
-               + "\n" + message + "\n");
+        emit sendMessage(message);
+        printF(settings->alias + ": (" + QTime::currentTime().toString()
+               + ")\n" + message + "\n");
     }
 
     ui->typeScreen->clear();
@@ -58,10 +60,8 @@ void MainWindow::on_actionConnect_triggered() {
     if(settingsDiag->result()) {
         //TODO: Connect to server/Listen for clients
         if(settings->isClient) {
-            //move these to be started when button pressed in gui
             qDebug("Client");
             setWindowTitle("Los Ostrich - Client");
-            enableChat(true);
 
             qDebug(settings->ipAddr.toLatin1().data());
             qDebug(QString::number(settings->port).toLatin1().data());
@@ -72,25 +72,35 @@ void MainWindow::on_actionConnect_triggered() {
             TextClient * tc = new TextClient(ip, settings->port, BUFSIZE);
             textClient = new Thread();
             textClient->start();
+
+            //Setting connections of signals
             connect(tc,SIGNAL(signalTextRecieved(TextReceived*)),
                     this,SLOT(slotTextRecieved(TextReceived*)));
-            tc->moveToThread(textClient);
+            connect(this, SIGNAL(sendMessage(const QString)),tc, SLOT(txMessage(const QString)));
             connect(this, SIGNAL(startSignalClient()), tc, SLOT(Start()));
+            connect(tc, SIGNAL(connectionError(const char*)), this, SLOT(error(const char*)));
+            connect(tc, SIGNAL(success(const char*)), this, SLOT(success(const char*)));
+
+            tc->moveToThread(textClient);
             emit startSignalClient();
         } else {
             qDebug("Server");
             setWindowTitle("Los Ostrich - Server");
-            enableChat(false);
 
             qDebug(QString::number(settings->port).toLatin1().data());
 
             TextServer * ts = new TextServer(settings->port, BUFSIZE);
             textServer = new Thread();
             textServer->start();
+
+            //Setting connections of signals
             connect(ts,SIGNAL(signalClientConnected(ClientConnect*)),
                     this,SLOT(slotClientConnected(ClientConnect*)));
-            ts->moveToThread(textServer);
             connect(this, SIGNAL(startSignalServer()), ts, SLOT(Start()));
+            connect(ts, SIGNAL(connectionError(const char*)), this, SLOT(error(const char*)));
+            connect(ts, SIGNAL(success(const char*)), this, SLOT(success(const char*)));
+
+            ts->moveToThread(textServer);
             emit startSignalServer();
         }
     } else {
@@ -101,4 +111,18 @@ void MainWindow::on_actionConnect_triggered() {
 void MainWindow::enableChat(bool enable) {
     ui->sendButton->setEnabled(enable);
     ui->typeScreen->setEnabled(enable);
+}
+
+void MainWindow::error(const char *error) {
+    QMessageBox::QMessageBox(QMessageBox::Critical, "Error", QString(error)
+                                         , QMessageBox::Ok, this).exec();
+}
+
+void MainWindow::success(const char *message) {
+    QString mesg(message);
+    if(settings->isClient) {
+        enableChat(true);
+        mesg += " Server: " + settings->ipAddr;
+    }
+    QMessageBox::QMessageBox(QMessageBox::NoIcon, "Success", mesg, QMessageBox::Ok, this).exec();
 }

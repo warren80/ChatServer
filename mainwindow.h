@@ -39,10 +39,13 @@ private slots:
     void on_actionConnect_triggered();
     void on_actionExit_triggered();
     void sendMessage();
+    void error(const char*);
+    void success(const char*);
 
 signals:
     void startSignalClient();
     void startSignalServer();
+    void sendMessage(const QString);
 };
 
 #endif // MAINWINDOW_H
