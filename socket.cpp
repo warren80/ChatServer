@@ -6,10 +6,6 @@ SocketClass::SocketClass(int type, int port, int packetSize)
     sPort_ = port;
     socketType_ = type;
     buflen_ = sizeof(MESSAGESTRUCT);
-   // if (socketDescriptor_ != 0) {
-   //     qDebug("Socket(): calling constructor more than once");
-   //     return;
-   // }
     switch (socketType_) {
     case TCP:
         createTCPSocket();
@@ -46,8 +42,6 @@ int SocketClass::TCPServer() {
     PMESSAGESTRUCT tempMesg;
     PMESSAGESTRUCT mesg = new MESSAGESTRUCT();
 
-
-    //bind(socketDescriptor_, (struct sockaddr *)&client_ , sizeof(client_)) == -1)
     if(bind(socketDescriptor_, (struct sockaddr *) &server_,
             sizeof(server_)) == -1) {
         qDebug("TCPServer(): bind");
