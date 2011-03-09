@@ -48,7 +48,7 @@ void TextClient::txMessage(const QString str) { //this function is in the gui th
     txMesg->alias = alias_;
 
     if(pSocket_->tx(txMesg) == -1) {
-        emit connectionError("Cannot send message to serer.");
+        emit connectionError("Disconnected from server.");
     }
 
     delete txMesg;
