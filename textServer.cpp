@@ -11,7 +11,7 @@
 
 TextServer::TextServer(int port, int bufsize)
     : Component(port, bufsize) {
-    pSocket = new Socket(TCP, port_, bufSize_);
+    pSocket = new SocketClass(TCP, port_, bufSize_);
 
 }
 

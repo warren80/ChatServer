@@ -3,7 +3,7 @@
 
 TextClient::TextClient(const char* ip, int port, int bufsize)
     : Component(port, bufsize) {
-    pSocket = new Socket(TCP, port, bufsize);
+    pSocket = new SocketClass(TCP, port, bufsize);
     ip_ = new char[16];
     strncpy(ip_,ip, 16);
 }

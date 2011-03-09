@@ -24,7 +24,7 @@ signals:
     void signalTextRecieved(TextReceived *);
 private:
     char * ip_;
-    Socket * pSocket;
+    SocketClass * pSocket;
 };
 
 #endif // TEXTCLIENT

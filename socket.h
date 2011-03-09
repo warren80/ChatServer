@@ -8,14 +8,17 @@
 #include <sys/types.h>
 #include <sys/socket.h>
 #include <netdb.h>
+#include <netinet/in.h>
+#include <arpa/inet.h>
+
 
 #define TCP 1
 #define UDP 2
 
-class Socket : public QObject {
+class SocketClass : public QObject {
     Q_OBJECT
 public:
-    Socket(int type, int port, int packetSize);
+    SocketClass(int type, int port, int packetSize);
     int SetAsClient(const char * str);
     int SetAsServer();
 

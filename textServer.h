@@ -24,7 +24,7 @@ signals:
     void signalClientConnected(ClientConnect *);
 
 private:
-    Socket * pSocket;
+    SocketClass * pSocket;
 };
 
 #endif // TEXTSERVER

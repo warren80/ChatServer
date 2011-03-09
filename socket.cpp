@@ -1,10 +1,14 @@
 #include "socket.h"
 
-Socket::Socket(int type, int port, int packetSize)
+SocketClass::SocketClass(int type, int port, int packetSize)
 {
     sPort_ = port;
     socketType_ = type;
     buflen_ = packetSize;
+   // if (socketDescriptor_ != 0) {
+   //     qDebug("Socket(): calling constructor more than once");
+   //     return;
+   // }
     switch (socketType_) {
     case TCP:
         createTCPSocket();
@@ -18,7 +22,7 @@ Socket::Socket(int type, int port, int packetSize)
     }
 }
 
-int Socket::SetAsServer() {
+int SocketClass::SetAsServer() {
     if (socketType_ == UDP) {
         qDebug("SetAsServer(): UDP server not created");
         return -1;
@@ -30,7 +34,7 @@ int Socket::SetAsServer() {
     return TCPServer();
 }
 
-int Socket::TCPServer() {
+int SocketClass::TCPServer() {
     int maxfd, maxi, nready, bytesToRead, n, i;
     socklen_t clientLength;
     int client[FD_SETSIZE];
@@ -39,7 +43,7 @@ int Socket::TCPServer() {
     fd_set allset, rset;
     char * bp, buffer[buflen_];
 
-
+    //bind(socketDescriptor_, (struct sockaddr *)&client_ , sizeof(client_)) == -1)
     if(bind(socketDescriptor_, (struct sockaddr *) &server_, sizeof(server_)) == -1) {
         qDebug("TCPServer(): bind");
         return -1;
@@ -50,7 +54,6 @@ int Socket::TCPServer() {
 
     for (i = 0; i < FD_SETSIZE; i++) {
         client[i] = -1;
-        Socket(TCP, sPort_, buflen_);
     }
 
     FD_ZERO(&allset);
@@ -65,6 +68,7 @@ int Socket::TCPServer() {
                 qDebug("TCPServer(): accept");
                 return -1;
             }
+            qDebug("TCPServer(): connection accepted %s", inet_ntoa(clientAddr.sin_addr)); //change to emit
             //some sort of emit here inet_ntoa(clientAddr.sin_addr);
             for (i = 0; i < FD_SETSIZE; ++i) {
                 if (client[i] != 0) {
@@ -99,6 +103,7 @@ int Socket::TCPServer() {
                     bp += n;
                     bytesToRead -= n;
                 }
+
                 //emit data to server probably have to copy this info for use in another thread
 
                 //write loop to all clients but this one
@@ -110,6 +115,7 @@ int Socket::TCPServer() {
 
                 if (n == 0) //connection closed by client
                 {
+                    qDebug("TCPServer(): Connection disconnected %s", inet_ntoa(clientAddr.sin_addr)); //again change this to emit
                     // emit signal that inet_ntoa(clientAddr.sin_addr)) has been closed
                     close(recieveSocketDescriptor);
                     FD_CLR(recieveSocketDescriptor, &allset);
@@ -123,13 +129,13 @@ int Socket::TCPServer() {
     } //end of while loop
 }
 
-int Socket::UDPServer() {
+int SocketClass::UDPServer() {
     return 1;
 }
 
-int Socket::SetupSocket(const char * str) {
+int SocketClass::SetupSocket(const char * str) {
     struct hostent *hp;
-
+    bzero((char *)&server_, sizeof(struct sockaddr_in));
     server_.sin_family = AF_INET;
     server_.sin_port = htons(sPort_);
     if (str != 0) {
@@ -148,7 +154,7 @@ int Socket::SetupSocket(const char * str) {
     return 1;
 }
 
-int Socket::SetAsClient(const char * str) {
+int SocketClass::SetAsClient(const char * str) {
     if (SetupSocket(str) == -1) {
         return -1;
     }
@@ -170,7 +176,7 @@ int Socket::SetAsClient(const char * str) {
     return 1;
 }
 
-void Socket::createTCPSocket() {
+void SocketClass::createTCPSocket() {
     int arg = 1;
     if ((socketDescriptor_ = socket(AF_INET, SOCK_STREAM, 0)) == -1) {
             qDebug("createTCPSocket(): Cannot Create Socket");
@@ -178,10 +184,11 @@ void Socket::createTCPSocket() {
     if (setsockopt (socketDescriptor_, SOL_SOCKET, SO_REUSEADDR, &arg, sizeof(arg)) == -1) {
             qDebug("createTCPSocket(): setsockopt");
     }
+    qDebug("createTCPSocket(): Socket Created");
     return;
 }
 
-void Socket::createUDPSocket() {
+void SocketClass::createUDPSocket() {
     int arg = 1;
     if ((socketDescriptor_ = socket(AF_INET, SOCK_DGRAM, 0)) == -1)  {
         qDebug("createUDPSocket(): Cannot Create Socket!");
@@ -191,7 +198,7 @@ void Socket::createUDPSocket() {
     }
 }
 
-int Socket::tx(const char * str, int length) {
+int SocketClass::tx(const char * str, int length) {
     switch (socketType_) {
     case TCP:
         return send(socketDescriptor_, str, length, 0);
@@ -203,11 +210,11 @@ int Socket::tx(const char * str, int length) {
     }
 }
 
-int Socket::tx(const QString str) {
+int SocketClass::tx(const QString str) {
     return tx(str.toLatin1().data(), str.length());
 }
 
-int Socket::tx(const char *str, int length, int socketDescriptor) {
+int SocketClass::tx(const char *str, int length, int socketDescriptor) {
     switch (socketType_) {
     case TCP:
         return send(socketDescriptor, str, length, 0);
@@ -219,7 +226,7 @@ int Socket::tx(const char *str, int length, int socketDescriptor) {
     }
 }
 
-int Socket::rx(char * str) {
+int SocketClass::rx(char * str) {
     int n = 0;
     int bytesToRead = buflen_;
 
@@ -248,6 +255,6 @@ int Socket::rx(char * str) {
     return n;
 }
 
-void Socket::closeSocket() {
+void SocketClass::closeSocket() {
     close(socketDescriptor_);
 }

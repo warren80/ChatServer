@@ -86,11 +86,14 @@ void MainWindow::on_actionConnect_triggered() {
 
             TextServer * ts = new TextServer(settings->port, BUFSIZE);
             textServer = new Thread();
-            textServer->start();
+
             connect(ts,SIGNAL(signalClientConnected(ClientConnect*)),
                     this,SLOT(slotClientConnected(ClientConnect*)));
-            ts->moveToThread(textServer);
             connect(this, SIGNAL(startSignalServer()), ts, SLOT(Start()));
+
+            textServer->start();
+            ts->moveToThread(textServer);
+
             emit startSignalServer();
         }
     } else {
