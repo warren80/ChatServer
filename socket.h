@@ -14,13 +14,13 @@
 #define TCP 1
 #define UDP 2
 
+
+
 typedef struct MessageStruct {
-    MessageStruct():mesgType(-1), ipAddr(0), alias(0), data(0), mesgLen(0){}
     int mesgType; //0 text, 1 voice, 2 stream, 3 file
-    char *ipAddr;
-    char *alias;
-    char *data;
-    int mesgLen;
+    char ipAddr[16];
+    char alias[32];
+    char data[1024]; //1072
 } MESSAGESTRUCT, *PMESSAGESTRUCT;
 
 class SocketClass : public QObject {

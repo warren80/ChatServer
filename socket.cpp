@@ -6,6 +6,10 @@ SocketClass::SocketClass(int type, int port, int packetSize)
     sPort_ = port;
     socketType_ = type;
     buflen_ = sizeof(MESSAGESTRUCT);
+   // if (socketDescriptor_ != 0) {
+   //     qDebug("Socket(): calling constructor more than once");
+   //     return;
+   // }
     switch (socketType_) {
     case TCP:
         createTCPSocket();
@@ -42,6 +46,7 @@ int SocketClass::TCPServer() {
     PMESSAGESTRUCT tempMesg;
     PMESSAGESTRUCT mesg = new MESSAGESTRUCT();
 
+    //bind(socketDescriptor_, (struct sockaddr *)&client_ , sizeof(client_)) == -1)
     if(bind(socketDescriptor_, (struct sockaddr *) &server_,
             sizeof(server_)) == -1) {
         qDebug("TCPServer(): bind");
@@ -74,6 +79,8 @@ int SocketClass::TCPServer() {
             qDebug("TCPServer(): connection accepted %s",
                    inet_ntoa(clientAddr.sin_addr)); //change to emit
 
+            emit SignalClientConnected(inet_ntoa(clientAddr.sin_addr));
+
             //some sort of emit here inet_ntoa(clientAddr.sin_addr);
             for (i = 0; i < FD_SETSIZE; ++i) {
                 if (client[i] != 0) {
@@ -87,8 +94,6 @@ int SocketClass::TCPServer() {
             }
             FD_SET(newSocketDescriptor, &allset);
 
-            emit SignalClientConnected(inet_ntoa(clientAddr.sin_addr));
-
             if (newSocketDescriptor > maxfd) {
                 maxfd = newSocketDescriptor;
             }
@@ -99,7 +104,7 @@ int SocketClass::TCPServer() {
                 continue;
             }
         } //end add new socket
-        //start check for new data
+        //start check for new dat            emit SignalClientConnected(inet_ntoa(clientAddr.sin_addr));a
         for (i = 0; i <= maxi; i++) {
             if ((recieveSocketDescriptor = client[i]) < 0) {
                 continue;
@@ -113,6 +118,8 @@ int SocketClass::TCPServer() {
                 }
 
                 //emit data to server probably have to copy this info for use in another thread
+                qDebug(mesg->ipAddr);
+                qDebug(mesg->data);
 
                 //write loop to all clients but this one
                 for(int j = 0; j < maxi; j++) {
