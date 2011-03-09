@@ -7,6 +7,7 @@
 
 struct TextReceived {
     TextReceived() :data(0) {}
+    QString alias;
     int data;
 };
 
@@ -14,17 +15,17 @@ class TextClient : public Component {
     Q_OBJECT
 
 public:
-    TextClient(const char* ip, int port, int bufsize) ;
+    TextClient(const char*, int, int) ;
     ~TextClient();
-    void txMessage(const char * str);
 public slots:
-    void slotTextRecieved(char *);
+    void slotTextRecieved(char*);
     virtual void Start();
+    void txMessage(const QString);
 signals:
-    void signalTextRecieved(TextReceived *);
+    void signalTextRecieved(TextReceived*);
 private:
     char * ip_;
-    SocketClass * pSocket;
+    SocketClass *pSocket_;
 };
 
 #endif // TEXTCLIENT

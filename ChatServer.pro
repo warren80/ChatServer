@@ -24,7 +24,6 @@ HEADERS  += mainwindow.h \
           textServer.h \
           socket.h \
           settings.h \
-    includes.h \
     thread.h \
     component.h
 

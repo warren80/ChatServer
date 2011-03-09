@@ -16,7 +16,11 @@ TextServer::TextServer(int port, int bufsize)
 }
 
 void TextServer::Start() {
-    pSocket->SetAsServer();
+    if(pSocket->SetAsServer() == -1) {
+        emit connectionError("Cannot start server.");
+    } else {
+        emit success("Server started.");
+    }
 }
 
 TextServer::~TextServer() {

@@ -13,8 +13,10 @@ public:
 protected:
     int bufSize_;
     int port_;
-signals:
 
+signals:
+    void connectionError(const char*);
+    void success(const char*);
 
 public slots:
 
