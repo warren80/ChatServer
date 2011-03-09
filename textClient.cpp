@@ -43,6 +43,8 @@ void TextClient::Start() {
 void TextClient::txMessage(const QString str) { //this function is in the gui thread and thats as planned
     PMESSAGESTRUCT txMesg = new MESSAGESTRUCT;
 
+    qDebug(str.toLatin1().data());
+
     strncpy(txMesg->data, str.toLatin1().data(), sizeof(char) * 1024);
     strncpy(txMesg->ipAddr,ip_,sizeof(char) * 16);
     strncpy(txMesg->alias,alias_, sizeof(char) * 32);

@@ -30,6 +30,7 @@ private:
     Thread * textClient;
     Thread * textServer;
     PSETTINGS settings;
+    TextClient *tc_;
 
 public slots:
     void slotClientConnected(PCLIENTSPECS);

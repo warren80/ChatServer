@@ -17,9 +17,9 @@ class TextClient : public Component {
 public:
     TextClient(char*, char*, int, int) ;
     ~TextClient();
+    void txMessage(const QString);
 public slots:
     virtual void Start();
-    void txMessage(const QString);
 signals:
     void signalTextRecieved(PMESGSPECS);
 private:

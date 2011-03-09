@@ -37,7 +37,7 @@ void MainWindow::sendMessage() {
     QString message = ui->typeScreen->toPlainText();
 
     if(message != "") {
-        emit sendMessage(message);
+        tc_->txMessage(message);
         printF(settings->alias + ": (" + QTime::currentTime().toString()
                + ")\n" + message + "\n");
     }
@@ -81,22 +81,20 @@ void MainWindow::on_actionConnect_triggered() {
             strcpy(ip, settings->ipAddr.toLatin1().data());
             strcpy(alias, settings->alias.toLatin1().data());
 
-            TextClient * tc = new TextClient(ip, alias, settings->port, BUFSIZE);
+            tc_ = new TextClient(ip, alias, settings->port, BUFSIZE);
             textClient = new Thread();
             textClient->start();
 
             //Setting connections of signals
-            connect(tc,SIGNAL(signalTextRecieved(PMESGSPECS)),
+            connect(tc_,SIGNAL(signalTextRecieved(PMESGSPECS)),
                     this,SLOT(slotTextRecieved(PMESGSPECS)));
-            connect(this, SIGNAL(sendMessage(const QString)),tc,
-                    SLOT(txMessage(const QString)));
-            connect(this, SIGNAL(startSignalClient()), tc, SLOT(Start()));
-            connect(tc, SIGNAL(connectionError(const char*)), this,
+            connect(this, SIGNAL(startSignalClient()), tc_, SLOT(Start()));
+            connect(tc_, SIGNAL(connectionError(const char*)), this,
                     SLOT(error(const char*)));
-            connect(tc, SIGNAL(success(const char*)), this,
+            connect(tc_, SIGNAL(success(const char*)), this,
                     SLOT(success(const char*)));
 
-            tc->moveToThread(textClient);
+            tc_->moveToThread(textClient);
             emit startSignalClient();
         } else {
             qDebug("Server");
