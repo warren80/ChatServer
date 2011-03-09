@@ -32,8 +32,8 @@ private:
     PSETTINGS settings;
 
 public slots:
-    void slotClientConnected(ClientConnect *);
-    void slotTextRecieved(TextReceived *);
+    void slotClientConnected(PCLIENTSPECS);
+    void slotTextRecieved(PMESGSPECS);
 
 private slots:
     void on_actionConnect_triggered();

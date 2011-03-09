@@ -5,26 +5,26 @@
 #include "socket.h"
 #include "component.h"
 
-struct TextReceived {
-    TextReceived() :data(0) {}
-    QString alias;
-    int data;
-};
+typedef struct MesgSpecs {
+    MesgSpecs():sender(0), data(0){}
+    const char *sender;
+    const char *data;
+}MESGSPECS, *PMESGSPECS;
 
 class TextClient : public Component {
     Q_OBJECT
 
 public:
-    TextClient(const char*, int, int) ;
+    TextClient(char*, char*, int, int) ;
     ~TextClient();
 public slots:
-    void slotTextRecieved(char*);
     virtual void Start();
     void txMessage(const QString);
 signals:
-    void signalTextRecieved(TextReceived*);
+    void signalTextRecieved(PMESGSPECS);
 private:
-    char * ip_;
+    char *ip_;
+    char *alias_;
     SocketClass *pSocket_;
 };
 

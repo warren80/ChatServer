@@ -13,12 +13,19 @@ MainWindow::MainWindow(QWidget *parent) :
     enableChat(false);
 }
 
-void MainWindow::slotClientConnected(ClientConnect*) {
+void MainWindow::slotClientConnected(PCLIENTSPECS client) {
+    qDebug("Client connected");
+    printF("Conncted: " + QString(client->ipAddr) + "~"
+           + QTime::currentTime().toString());
 
+    delete client;
 }
 
-void MainWindow::slotTextRecieved(TextReceived*) {
-
+void MainWindow::slotTextRecieved(PMESGSPECS mesg) {
+    qDebug("Client received a message");
+    printF(QString(mesg->sender) + ": (" + QTime::currentTime().toString()
+           + ")\n" + QString(mesg->data) + "\n");
+    delete mesg;
 }
 
 MainWindow::~MainWindow()
@@ -68,18 +75,26 @@ void MainWindow::on_actionConnect_triggered() {
             qDebug(settings->alias.toLatin1().data());
 
             //TODO get a port from gui and ip just a hack here to make it compile
-            char *ip = settings->ipAddr.toLatin1().data();
-            TextClient * tc = new TextClient(ip, settings->port, BUFSIZE);
+            char *ip = (char*)malloc(settings->ipAddr.size() * sizeof(char));
+            char *alias = (char*)malloc(settings->alias.size() * sizeof(char));
+
+            strcpy(ip, settings->ipAddr.toLatin1().data());
+            strcpy(alias, settings->alias.toLatin1().data());
+
+            TextClient * tc = new TextClient(ip, alias, settings->port, BUFSIZE);
             textClient = new Thread();
             textClient->start();
 
             //Setting connections of signals
-            connect(tc,SIGNAL(signalTextRecieved(TextReceived*)),
-                    this,SLOT(slotTextRecieved(TextReceived*)));
-            connect(this, SIGNAL(sendMessage(const QString)),tc, SLOT(txMessage(const QString)));
+            connect(tc,SIGNAL(signalTextRecieved(PMESGSPECS)),
+                    this,SLOT(slotTextRecieved(PMESGSPECS)));
+            connect(this, SIGNAL(sendMessage(const QString)),tc,
+                    SLOT(txMessage(const QString)));
             connect(this, SIGNAL(startSignalClient()), tc, SLOT(Start()));
-            connect(tc, SIGNAL(connectionError(const char*)), this, SLOT(error(const char*)));
-            connect(tc, SIGNAL(success(const char*)), this, SLOT(success(const char*)));
+            connect(tc, SIGNAL(connectionError(const char*)), this,
+                    SLOT(error(const char*)));
+            connect(tc, SIGNAL(success(const char*)), this,
+                    SLOT(success(const char*)));
 
             tc->moveToThread(textClient);
             emit startSignalClient();
@@ -94,11 +109,13 @@ void MainWindow::on_actionConnect_triggered() {
             textServer->start();
 
             //Setting connections of signals
-            connect(ts,SIGNAL(signalClientConnected(ClientConnect*)),
-                    this,SLOT(slotClientConnected(ClientConnect*)));
+            connect(ts,SIGNAL(signalClientConnected(PCLIENTSPECS)),
+                    this,SLOT(slotClientConnected(PCLIENTSPECS)));
             connect(this, SIGNAL(startSignalServer()), ts, SLOT(Start()));
-            connect(ts, SIGNAL(connectionError(const char*)), this, SLOT(error(const char*)));
-            connect(ts, SIGNAL(success(const char*)), this, SLOT(success(const char*)));
+            connect(ts, SIGNAL(connectionError(const char*)), this,
+                    SLOT(error(const char*)));
+            connect(ts, SIGNAL(success(const char*)), this,
+                    SLOT(success(const char*)));
 
             ts->moveToThread(textServer);
             emit startSignalServer();
@@ -124,5 +141,6 @@ void MainWindow::success(const char *message) {
         enableChat(true);
         mesg += " Server: " + settings->ipAddr;
     }
-    QMessageBox::QMessageBox(QMessageBox::NoIcon, "Success", mesg, QMessageBox::Ok, this).exec();
+    QMessageBox::QMessageBox(QMessageBox::NoIcon, "Success", mesg,
+                             QMessageBox::Ok, this).exec();
 }

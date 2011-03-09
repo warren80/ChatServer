@@ -1,10 +1,11 @@
 #include "socket.h"
+#include <errno.h>
 
 SocketClass::SocketClass(int type, int port, int packetSize)
 {
     sPort_ = port;
     socketType_ = type;
-    buflen_ = packetSize;
+    buflen_ = sizeof(MESSAGESTRUCT);
    // if (socketDescriptor_ != 0) {
    //     qDebug("Socket(): calling constructor more than once");
    //     return;
@@ -41,13 +42,19 @@ int SocketClass::TCPServer() {
     int newSocketDescriptor, recieveSocketDescriptor;
     struct sockaddr_in clientAddr;
     fd_set allset, rset;
-    char * bp, buffer[buflen_];
+
+    PMESSAGESTRUCT tempMesg;
+    PMESSAGESTRUCT mesg = new MESSAGESTRUCT();
+
 
     //bind(socketDescriptor_, (struct sockaddr *)&client_ , sizeof(client_)) == -1)
-    if(bind(socketDescriptor_, (struct sockaddr *) &server_, sizeof(server_)) == -1) {
+    if(bind(socketDescriptor_, (struct sockaddr *) &server_,
+            sizeof(server_)) == -1) {
         qDebug("TCPServer(): bind");
         return -1;
     }
+
+    qDebug("Listening for clients");
     listen(socketDescriptor_, FD_SETSIZE);
     maxfd = socketDescriptor_;
     maxi = -1;
@@ -64,11 +71,15 @@ int SocketClass::TCPServer() {
         nready = select(maxfd + 1, &rset, NULL, NULL, NULL);
         if (FD_ISSET(socketDescriptor_, &rset)) {
             clientLength = sizeof(clientAddr);
-            if ((newSocketDescriptor = accept(socketDescriptor_, (struct sockaddr *) &clientAddr, &clientLength)) == -1) {
+            if ((newSocketDescriptor = accept(socketDescriptor_,
+                                              (struct sockaddr *) &clientAddr,
+                                              &clientLength)) == -1) {
                 qDebug("TCPServer(): accept");
                 return -1;
             }
-            qDebug("TCPServer(): connection accepted %s", inet_ntoa(clientAddr.sin_addr)); //change to emit
+            qDebug("TCPServer(): connection accepted %s",
+                   inet_ntoa(clientAddr.sin_addr)); //change to emit
+
             //some sort of emit here inet_ntoa(clientAddr.sin_addr);
             for (i = 0; i < FD_SETSIZE; ++i) {
                 if (client[i] != 0) {
@@ -81,6 +92,9 @@ int SocketClass::TCPServer() {
                 return -1;
             }
             FD_SET(newSocketDescriptor, &allset);
+
+            emit SignalClientConnected(inet_ntoa(clientAddr.sin_addr));
+
             if (newSocketDescriptor > maxfd) {
                 maxfd = newSocketDescriptor;
             }
@@ -97,10 +111,10 @@ int SocketClass::TCPServer() {
                 continue;
             }
             if (FD_ISSET (recieveSocketDescriptor,&rset)) {
-                bp = buffer;
+                tempMesg = mesg;
                 bytesToRead = buflen_;
-                while((n = recv(recieveSocketDescriptor, bp, bytesToRead, NULL)) > 0) {
-                    bp += n;
+                while((n = rx(mesg)) > 0) {
+                    tempMesg += n;
                     bytesToRead -= n;
                 }
 
@@ -108,14 +122,15 @@ int SocketClass::TCPServer() {
 
                 //write loop to all clients but this one
                 for(int j = 0; j < maxi; j++) {
-                    if(client[i] != -1) {
-                        tx(buffer, buflen_, client[i]);
+                    if(client[i] != -1 || client[i] != recieveSocketDescriptor) {
+                        tx(mesg, buflen_, client[i]);
                     }
                 }
 
                 if (n == 0) //connection closed by client
                 {
-                    qDebug("TCPServer(): Connection disconnected %s", inet_ntoa(clientAddr.sin_addr)); //again change this to emit
+                    qDebug("TCPServer(): Connection disconnected %s",
+                           inet_ntoa(clientAddr.sin_addr)); //again change this to emit
                     // emit signal that inet_ntoa(clientAddr.sin_addr)) has been closed
                     close(recieveSocketDescriptor);
                     FD_CLR(recieveSocketDescriptor, &allset);
@@ -143,7 +158,7 @@ int SocketClass::SetupSocket(const char * str) {
             qDebug("SetupSocket(): getHostByName(): No such server available.");
             return -1;
         }
-        bcopy(hp->h_addr, (char *) &server_.sin_addr, hp->h_length);
+        bcopy(hp->h_addr, (char *)&server_.sin_addr, hp->h_length);
     } else {
         server_.sin_addr.s_addr = htonl(INADDR_ANY);
         return 1;
@@ -160,13 +175,16 @@ int SocketClass::SetAsClient(const char * str) {
     }
     switch(socketType_) {
     case UDP:
-        if (bind(socketDescriptor_, (struct sockaddr *)&client_ , sizeof(client_)) == -1) {
+        if (bind(socketDescriptor_, (struct sockaddr *)&client_ ,
+                 sizeof(client_)) == -1) {
             qDebug("SetAsClient(): failure to bind to port");
             return -1;
         }
         break;
     case TCP:
-        if (::connect(socketDescriptor_, (struct sockaddr *) &server_, sizeof(server_)) == -1) {
+        if (::connect(socketDescriptor_, (struct sockaddr*)&server_,
+                      sizeof(server_)) == -1) {
+            qDebug(QString::number(errno).toLatin1().data());
             qDebug("SetAsClient(): failure to connect to port");
             return -1;
         }
@@ -181,7 +199,8 @@ void SocketClass::createTCPSocket() {
     if ((socketDescriptor_ = socket(AF_INET, SOCK_STREAM, 0)) == -1) {
             qDebug("createTCPSocket(): Cannot Create Socket");
     }
-    if (setsockopt (socketDescriptor_, SOL_SOCKET, SO_REUSEADDR, &arg, sizeof(arg)) == -1) {
+    if (setsockopt (socketDescriptor_, SOL_SOCKET, SO_REUSEADDR, &arg,
+                    sizeof(arg)) == -1) {
             qDebug("createTCPSocket(): setsockopt");
     }
     qDebug("createTCPSocket(): Socket Created");
@@ -193,47 +212,50 @@ void SocketClass::createUDPSocket() {
     if ((socketDescriptor_ = socket(AF_INET, SOCK_DGRAM, 0)) == -1)  {
         qDebug("createUDPSocket(): Cannot Create Socket!");
     }
-    if (setsockopt (socketDescriptor_, SOL_SOCKET, SO_REUSEADDR, &arg, sizeof(arg)) == -1) {
+    if (setsockopt (socketDescriptor_, SOL_SOCKET, SO_REUSEADDR, &arg,
+                    sizeof(arg)) == -1) {
         qDebug("createUDPSocket(): setsockopt");
     }
 }
 
-int SocketClass::tx(const char * str, int length) {
+int SocketClass::tx(PMESSAGESTRUCT mesg, int length) {
     switch (socketType_) {
     case TCP:
-        return send(socketDescriptor_, str, length, 0);
+        return send(socketDescriptor_, mesg, length, 0);
     case UDP:
-        return sendto(socketDescriptor_, str, length, 0, (struct sockaddr *) &server_, serverLength_);
+        return sendto(socketDescriptor_, mesg, length, 0,
+                      (struct sockaddr *) &server_, serverLength_);
     default:
         qDebug("Socket(): invalid socket type");
         return -1;
     }
 }
 
-int SocketClass::tx(const QString str) {
-    return tx(str.toLatin1().data(), str.length());
+int SocketClass::tx(PMESSAGESTRUCT mesg) {
+    return tx(mesg, sizeof(mesg));
 }
 
-int SocketClass::tx(const char *str, int length, int socketDescriptor) {
+int SocketClass::tx(PMESSAGESTRUCT mesg, int length, int socketDescriptor) {
     switch (socketType_) {
     case TCP:
-        return send(socketDescriptor, str, length, 0);
+        return send(socketDescriptor, mesg, length, 0);
     case UDP:
-        return sendto(socketDescriptor, str, length, 0, (struct sockaddr *) &server_, serverLength_);
+        return sendto(socketDescriptor, mesg, length, 0,
+                      (struct sockaddr*)&server_, serverLength_);
     default:
         qDebug("Socket(): invalid socket type");
         return -1;
     }
 }
 
-int SocketClass::rx(char * str) {
+int SocketClass::rx(PMESSAGESTRUCT mesg) {
     int n = 0;
     int bytesToRead = buflen_;
 
     while((n !=  buflen_)) {
         switch (socketType_) {
         case TCP:
-            n = recv(socketDescriptor_, str, bytesToRead, 0);
+            n = recv(socketDescriptor_, mesg, bytesToRead, 0);
             if (n == -1) {
                 qDebug ("Rx(): recv(): error");
                 return -1;
@@ -250,7 +272,7 @@ int SocketClass::rx(char * str) {
             return -1;
         }
         bytesToRead -= n;
-        str += n;
+        mesg += n;
     }
     return n;
 }

@@ -186,6 +186,9 @@ border-radius: 8px;
 padding-left: 2px;
 padding-right: 2px;</string>
     </property>
+    <property name="text">
+     <string>Local</string>
+    </property>
    </widget>
   </widget>
   <widget class="QWidget" name="widget" native="true">
