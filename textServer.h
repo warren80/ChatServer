@@ -19,12 +19,8 @@ public:
     TextServer(int, int);
     ~TextServer();
 public slots:
-    void slotClientConnect(char*);
-    void slotClientDisconnect(char*);
     virtual void Start();
 signals:
-    void signalClientDisconnected(MessageStruct *);
-    void signalShowClientConnected(MessageStruct *);
     void connectionError(const char*);
 
 private:

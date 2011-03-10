@@ -42,7 +42,7 @@ void TextClient::txMessage(const QString str) { //this function is in the gui th
     strncpy(txMesg->alias,alias_, ALIASSIZE);
 
     if(pSocket_->tx(txMesg) == -1) {
-        emit connectionError("Cannot send message to serer.");
+        emit connectionError("Cannot send message to sender.");
     }
 
     delete txMesg;

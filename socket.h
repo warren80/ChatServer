@@ -12,6 +12,7 @@
 #include <arpa/inet.h>
 
 #include <QtGui>
+#include <QFile>
 
 #define TCP 1
 #define UDP 2
@@ -54,10 +55,6 @@ private:
     struct sockaddr_in client_, server_;
     int serverLength_;
     int socketDescriptor_;
-
-signals:
-    void SignalClientConnected(char*);
-    void SignalClientDisconnected(char*);
 
 };
 

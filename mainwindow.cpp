@@ -13,14 +13,6 @@ MainWindow::MainWindow(QWidget *parent) :
     enableChat(false);
 }
 
-void MainWindow::slotClientConnected(MessageStruct *client) {
-    qDebug("Client connected");
-    printF("Conncted: " + QString(client->ipAddr) + "~"
-           + QTime::currentTime().toString());
-
-    delete client;
-}
-
 void MainWindow::slotTextRecieved(MessageStruct * mesg) {
     qDebug("Client received a message");
     printF(QString(mesg->alias) + ": (" + QTime::currentTime().toString()
@@ -99,6 +91,8 @@ void MainWindow::on_actionConnect_triggered() {
         } else {
             qDebug("Server");
             setWindowTitle("Los Ostrich - Server");
+            printF(QString("Server Log will be saved to: log"));
+            printF(QString("Error Log will be saved to: errorLog"));
 
             qDebug(QString::number(settings->port).toLatin1().data());
 
@@ -107,8 +101,6 @@ void MainWindow::on_actionConnect_triggered() {
             textServer->start();
 
             //Setting connections of signals
-            connect(ts,SIGNAL(signalShowClientConnected(MessageStruct *)),
-                    this,SLOT(slotClientConnected(MessageStruct *)));
             connect(this, SIGNAL(startSignalServer()), ts, SLOT(Start()));
             connect(ts, SIGNAL(connectionError(const char*)), this,
                     SLOT(error(const char*)));

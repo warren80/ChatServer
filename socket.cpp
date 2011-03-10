@@ -1,4 +1,5 @@
 #include "socket.h"
+#include <QDateTime>
 #include <errno.h>
 
 SocketClass::SocketClass(int type, int port) {
@@ -39,7 +40,18 @@ int SocketClass::TCPServer() {
     fd_set allset, rset;
 
     MessageStruct * tempMesg;
+    QFile *log = new QFile("log");
     MessageStruct * mesg = new MessageStruct();
+
+    if(!log->open(QIODevice::WriteOnly)) {
+        return -1;
+    }
+
+    log->write(QString("Server Log ("
+                       + QDateTime::currentDateTime().toString()
+                       + ")").toLatin1().data());
+
+    log->close();
 
     if(bind(socketDescriptor_, (struct sockaddr *) &server_,
             sizeof(server_)) == -1) {
@@ -70,10 +82,17 @@ int SocketClass::TCPServer() {
                 qDebug("TCPServer(): accept");
                 return -1;
             }
-            qDebug("TCPServer(): connection accepted %s",
-                   inet_ntoa(clientAddr.sin_addr)); //change to emit
+           qDebug("TCPServer(): connection accepted %s ",
+                inet_ntoa(clientAddr.sin_addr)); //change to emit
 
-            emit SignalClientConnected(inet_ntoa(clientAddr.sin_addr));
+           if(!log->open(QIODevice::Append)) {
+               return -1;
+           }
+           log->write(QString("\nIP: "
+                              + QString(inet_ntoa(clientAddr.sin_addr))
+                              + " (Connected: " + QTime::currentTime().toString()
+                              + ")").toLatin1().data());
+           log->close();
 
             //some sort of emit here inet_ntoa(clientAddr.sin_addr);
             for (i = 0; i < FD_SETSIZE; ++i) {
@@ -124,6 +143,14 @@ int SocketClass::TCPServer() {
 
                 if (n == 0) //connection closed by client
                 {
+                    if(!log->open(QIODevice::Append)) {
+                        return -1;
+                    }
+                    log->write(QString("\nIP: "
+                                       + QString(inet_ntoa(clientAddr.sin_addr))
+                                       + " (Disconnected: " + QTime::currentTime().toString()
+                                       + ")").toLatin1().data());
+                    log->close();
                     qDebug("TCPServer(): Connection disconnected %s",
                            inet_ntoa(clientAddr.sin_addr));
                     close(recieveSocketDescriptor);

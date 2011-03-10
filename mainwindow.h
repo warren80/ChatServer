@@ -33,7 +33,6 @@ private:
     TextClient *tc_;
 
 public slots:
-    void slotClientConnected(MessageStruct *);
     void slotTextRecieved(MessageStruct *);
 
 private slots:
