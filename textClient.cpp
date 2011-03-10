@@ -24,7 +24,7 @@ void TextClient::Start() {
         emit success("Connected to server.");
     }
 
-    while (pSocket_->rx(rxMesg) > 0) {
+    while (pSocket_->rx(rxMesg) >= 0) {
         mesg = new MESGSPECS;
 
         if(strcmp(rxMesg->alias, "Local") == 0) {

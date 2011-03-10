@@ -112,7 +112,7 @@ int SocketClass::TCPServer() {
             if (FD_ISSET (recieveSocketDescriptor,&rset)) {
                 tempMesg = mesg;
                 bytesToRead = buflen_;
-                while((n = rx(mesg)) > 0) {
+                while((n = read(recieveSocketDescriptor, tempMesg, bytesToRead)) > 0) {
                     tempMesg += n;
                     bytesToRead -= n;
                 }
@@ -258,6 +258,7 @@ int SocketClass::rx(PMESSAGESTRUCT mesg) {
         case TCP:
             n = recv(socketDescriptor_, mesg, bytesToRead, 0);
             if (n == -1) {
+                qDebug(QString::number(errno).toLatin1().data());
                 qDebug ("Rx(): recv(): error");
                 return -1;
             }
