@@ -8,7 +8,7 @@
 #include "settings.h"
 #include "thread.h"
 
-#define BUFSIZE 1024
+#define BUFSIZE 1072
 
 namespace Ui {
     class MainWindow;
@@ -30,6 +30,7 @@ private:
     Thread * textClient;
     Thread * textServer;
     PSETTINGS settings;
+    TextClient *tc_;
 
 public slots:
     void slotClientConnected(PCLIENTSPECS);

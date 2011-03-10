@@ -43,9 +43,11 @@ void TextClient::Start() {
 void TextClient::txMessage(const QString str) { //this function is in the gui thread and thats as planned
     PMESSAGESTRUCT txMesg = new MESSAGESTRUCT;
 
-    txMesg->data = str.toLatin1().data();
-    txMesg->ipAddr = ip_;
-    txMesg->alias = alias_;
+    qDebug(str.toLatin1().data());
+
+    strncpy(txMesg->data, str.toLatin1().data(), sizeof(char) * 1024);
+    strncpy(txMesg->ipAddr,ip_,sizeof(char) * 16);
+    strncpy(txMesg->alias,alias_, sizeof(char) * 32);
 
     if(pSocket_->tx(txMesg) == -1) {
         emit connectionError("Cannot send message to serer.");
