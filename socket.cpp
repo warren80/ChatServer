@@ -112,7 +112,7 @@ int SocketClass::TCPServer() {
             if (FD_ISSET (recieveSocketDescriptor,&rset)) {
                 tempMesg = mesg;
                 bytesToRead = buflen_;
-                while((n = read(recieveSocketDescriptor, tempMesg, bytesToRead)) > 0) {
+                while(bytesToRead != 0 && (n = read(recieveSocketDescriptor, tempMesg, bytesToRead)) > 0) {
                     tempMesg += n;
                     bytesToRead -= n;
                 }

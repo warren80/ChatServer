@@ -13,7 +13,6 @@ TextClient::TextClient(char *ip, char *alias, int port, int bufsize)
 }
 
 void TextClient::Start() {
-    int n;
     qDebug("Client Started");
     PMESGSPECS mesg;
     PMESSAGESTRUCT rxMesg = new MESSAGESTRUCT;
@@ -25,10 +24,7 @@ void TextClient::Start() {
         emit success("Connected to server.");
     }
 
-    while ((n = pSocket_->rx(rxMesg)) >= 0) {
-        if (n == 0) {
-            continue;
-        }
+    while (pSocket_->rx(rxMesg) > 0) {
         mesg = new MESGSPECS;
 
         if(strcmp(rxMesg->alias, "Local") == 0) {
