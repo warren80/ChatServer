@@ -45,9 +45,9 @@ void TextClient::txMessage(const QString str) { //this function is in the gui th
 
     qDebug(str.toLatin1().data());
 
-    strncpy(txMesg->data, str.toLatin1().data(), sizeof(char) * 1024);
-    strncpy(txMesg->ipAddr,ip_,sizeof(char) * 16);
-    strncpy(txMesg->alias,alias_, sizeof(char) * 32);
+    strncpy(txMesg->data, str.toLatin1().data(), BUFSIZE - IPADDRSIZE -ALIASSIZE );
+    strncpy(txMesg->ipAddr,ip_,IPADDRSIZE);
+    strncpy(txMesg->alias,alias_, ALIASSIZE);
 
     if(pSocket_->tx(txMesg) == -1) {
         emit connectionError("Cannot send message to serer.");
