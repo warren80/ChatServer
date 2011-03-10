@@ -24,7 +24,7 @@ public slots:
     virtual void Start();
 signals:
     void signalClientDisconnected(MessageStruct *);
-    void signalClientConnected(MessageStruct *);
+    void signalShowClientConnected(MessageStruct *);
     void connectionError(const char*);
 
 private:

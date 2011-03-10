@@ -5,10 +5,6 @@ SocketClass::SocketClass(int type, int port) {
     sPort_ = port;
     socketType_ = type;
     buflen_ = sizeof(MessageStruct);
-   // if (socketDescriptor_ != 0) {
-   //     qDebug("Socket(): calling constructor more than once");
-   //     return;
-   // }
     switch (socketType_) {
     case TCP:
         createTCPSocket();
@@ -45,7 +41,6 @@ int SocketClass::TCPServer() {
     MessageStruct * tempMesg;
     MessageStruct * mesg = new MessageStruct();
 
-    //bind(socketDescriptor_, (struct sockaddr *)&client_ , sizeof(client_)) == -1)
     if(bind(socketDescriptor_, (struct sockaddr *) &server_,
             sizeof(server_)) == -1) {
         qDebug("TCPServer(): bind");
@@ -121,18 +116,16 @@ int SocketClass::TCPServer() {
                 qDebug(mesg->data);
                 qDebug(QString::number(recieveSocketDescriptor).toLatin1().data());
 
+                //write to all but current fn
+                //
+                writeToEveryoneElse(maxi, client, recieveSocketDescriptor, mesg);
                 //write loop to all clients but this one
-                for(int j = 0; j < maxi + 1; j++) {
-                    if(client[j] != -1 && client[j] != recieveSocketDescriptor) {
-                        tx(mesg, buflen_, client[j]);
-                    }
-                }
+
 
                 if (n == 0) //connection closed by client
                 {
                     qDebug("TCPServer(): Connection disconnected %s",
-                           inet_ntoa(clientAddr.sin_addr)); //again change this to emit
-                    // emit signal that inet_ntoa(clientAddr.sin_addr)) has been closed
+                           inet_ntoa(clientAddr.sin_addr));
                     close(recieveSocketDescriptor);
                     FD_CLR(recieveSocketDescriptor, &allset);
                     client[i] = -1;
@@ -143,6 +136,14 @@ int SocketClass::TCPServer() {
             } //end of FD_ISSET
         } //end of read/write loop
     } //end of while loop
+}
+
+void SocketClass::writeToEveryoneElse(int maxi, int client[FD_SETSIZE], int recieveSocketDescriptor, MessageStruct * mesg) {
+    for(int j = 0; j < maxi + 1; j++) {  //this loop still doesn't work right
+        if(client[j] != -1 && client[j] != recieveSocketDescriptor) {
+            tx(mesg, buflen_, client[j]);
+        }
+    }
 }
 
 int SocketClass::UDPServer() {

@@ -45,6 +45,8 @@ private:
     int TCPServer();
     int UDPServer();
     int SetupSocket(const char*);
+    void writeToEveryoneElse(int maxi, int client[FD_SETSIZE],
+             int recieveSocketDescriptor, MessageStruct * mesg);
 
     int buflen_;
     int socketType_;

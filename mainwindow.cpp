@@ -13,7 +13,7 @@ MainWindow::MainWindow(QWidget *parent) :
     enableChat(false);
 }
 
-void MainWindow::slotClientConnected(MessageStruct * client) {
+void MainWindow::slotClientConnected(MessageStruct *client) {
     qDebug("Client connected");
     printF("Conncted: " + QString(client->ipAddr) + "~"
            + QTime::currentTime().toString());
@@ -23,7 +23,7 @@ void MainWindow::slotClientConnected(MessageStruct * client) {
 
 void MainWindow::slotTextRecieved(MessageStruct * mesg) {
     qDebug("Client received a message");
-    printF(QString(mesg->ipAddr) + ": (" + QTime::currentTime().toString()
+    printF(QString(mesg->alias) + ": (" + QTime::currentTime().toString()
            + ")\n" + QString(mesg->data) + "\n");
     delete mesg;
 }
@@ -107,7 +107,7 @@ void MainWindow::on_actionConnect_triggered() {
             textServer->start();
 
             //Setting connections of signals
-            connect(ts,SIGNAL(signalClientConnected(MessageStruct *)),
+            connect(ts,SIGNAL(signalShowClientConnected(MessageStruct *)),
                     this,SLOT(slotClientConnected(MessageStruct *)));
             connect(this, SIGNAL(startSignalServer()), ts, SLOT(Start()));
             connect(ts, SIGNAL(connectionError(const char*)), this,

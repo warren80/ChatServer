@@ -127,7 +127,7 @@ public:
         clientBox->setTitle(QApplication::translate("Settings", "Client Settings", 0, QApplication::UnicodeUTF8));
         ipLabel->setText(QApplication::translate("Settings", "IP:", 0, QApplication::UnicodeUTF8));
         aliasLabel->setText(QApplication::translate("Settings", "Alias:", 0, QApplication::UnicodeUTF8));
-        aliasText->setText(QApplication::translate("Settings", "Local", 0, QApplication::UnicodeUTF8));
+        aliasText->setText(QString());
     } // retranslateUi
 
 };
