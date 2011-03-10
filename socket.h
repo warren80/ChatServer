@@ -22,6 +22,8 @@ typedef struct MessageStruct {
     char alias[32];
     char data[1024]; //1072
 } MESSAGESTRUCT, *PMESSAGESTRUCT;
+Q_DECLARE_METATYPE(PMESSAGESTRUCT);
+
 
 class SocketClass : public QObject {
     Q_OBJECT

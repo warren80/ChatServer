@@ -83,7 +83,7 @@ int SocketClass::TCPServer() {
 
             //some sort of emit here inet_ntoa(clientAddr.sin_addr);
             for (i = 0; i < FD_SETSIZE; ++i) {
-                if (client[i] != 0) {
+                if (client[i] < 0) {
                     client[i] = newSocketDescriptor;
                     break;
                 }
@@ -120,11 +120,12 @@ int SocketClass::TCPServer() {
                 //emit data to server probably have to copy this info for use in another thread
                 qDebug(mesg->ipAddr);
                 qDebug(mesg->data);
+                qDebug(QString::number(recieveSocketDescriptor).toLatin1().data());
 
                 //write loop to all clients but this one
-                for(int j = 0; j < maxi; j++) {
-                    if(client[i] != -1 || client[i] != recieveSocketDescriptor) {
-                        tx(mesg, buflen_, client[i]);
+                for(int j = 0; j < maxi + 1; j++) {
+                    if(client[j] != -1 && client[j] != recieveSocketDescriptor) {
+                        tx(mesg, buflen_, client[j]);
                     }
                 }
 
@@ -239,6 +240,7 @@ int SocketClass::tx(PMESSAGESTRUCT mesg) {
 int SocketClass::tx(PMESSAGESTRUCT mesg, int length, int socketDescriptor) {
     switch (socketType_) {
     case TCP:
+        qDebug(QString::number(socketDescriptor).toLatin1().data());
         return send(socketDescriptor, mesg, length, 0);
     case UDP:
         return sendto(socketDescriptor, mesg, length, 0,
