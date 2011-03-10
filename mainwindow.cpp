@@ -107,8 +107,8 @@ void MainWindow::on_actionConnect_triggered() {
             textServer->start();
 
             //Setting connections of signals
-            connect(ts,SIGNAL(signalClientConnected(PCLIENTSPECS)),
-                    this,SLOT(slotClientConnected(PCLIENTSPECS)));
+            connect(ts,SIGNAL(signalClientConnected(ClientSpecs *)),
+                    this,SLOT(slotClientConnected(ClientSpecs *)));
             connect(this, SIGNAL(startSignalServer()), ts, SLOT(Start()));
             connect(ts, SIGNAL(connectionError(const char*)), this,
                     SLOT(error(const char*)));
