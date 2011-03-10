@@ -86,8 +86,8 @@ void MainWindow::on_actionConnect_triggered() {
             textClient->start();
 
             //Setting connections of signals
-            connect(tc_,SIGNAL(signalTextRecieved(PMESGSPECS)),
-                    this,SLOT(slotTextRecieved(PMESGSPECS)));
+            connect(tc_,SIGNAL(signalTextRecieved(MesgSpecs *)),
+                    this,SLOT(slotTextRecieved(MesgSpecs *)));
             connect(this, SIGNAL(startSignalClient()), tc_, SLOT(Start()));
             connect(tc_, SIGNAL(connectionError(const char*)), this,
                     SLOT(error(const char*)));
