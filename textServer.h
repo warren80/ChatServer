@@ -5,10 +5,12 @@
 #include "socket.h"
 #include "component.h"
 
+/*
 struct ClientSpecs {
     ClientSpecs():ipAddr(0){}
     char *ipAddr;
 };
+*/
 
 class TextServer : public Component {
     Q_OBJECT
@@ -21,8 +23,8 @@ public slots:
     void slotClientDisconnect(char*);
     virtual void Start();
 signals:
-    void signalClientDisconnected(ClientSpecs *);
-    void signalClientConnected(ClientSpecs *);
+    void signalClientDisconnected(MessageStruct *);
+    void signalClientConnected(MessageStruct *);
     void connectionError(const char*);
 
 private:

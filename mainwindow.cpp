@@ -13,7 +13,7 @@ MainWindow::MainWindow(QWidget *parent) :
     enableChat(false);
 }
 
-void MainWindow::slotClientConnected(ClientSpecs * client) {
+void MainWindow::slotClientConnected(MessageStruct * client) {
     qDebug("Client connected");
     printF("Conncted: " + QString(client->ipAddr) + "~"
            + QTime::currentTime().toString());
@@ -21,9 +21,9 @@ void MainWindow::slotClientConnected(ClientSpecs * client) {
     delete client;
 }
 
-void MainWindow::slotTextRecieved(MesgSpecs * mesg) {
+void MainWindow::slotTextRecieved(MessageStruct * mesg) {
     qDebug("Client received a message");
-    printF(QString(mesg->sender) + ": (" + QTime::currentTime().toString()
+    printF(QString(mesg->ipAddr) + ": (" + QTime::currentTime().toString()
            + ")\n" + QString(mesg->data) + "\n");
     delete mesg;
 }
@@ -86,8 +86,8 @@ void MainWindow::on_actionConnect_triggered() {
             textClient->start();
 
             //Setting connections of signals
-            connect(tc_,SIGNAL(signalTextRecieved(MesgSpecs *)),
-                    this,SLOT(slotTextRecieved(MesgSpecs *)));
+            connect(tc_,SIGNAL(signalTextRecieved(MessageStruct *)),
+                    this,SLOT(slotTextRecieved(MessageStruct *)));
             connect(this, SIGNAL(startSignalClient()), tc_, SLOT(Start()));
             connect(tc_, SIGNAL(connectionError(const char*)), this,
                     SLOT(error(const char*)));
@@ -107,8 +107,8 @@ void MainWindow::on_actionConnect_triggered() {
             textServer->start();
 
             //Setting connections of signals
-            connect(ts,SIGNAL(signalClientConnected(ClientSpecs *)),
-                    this,SLOT(slotClientConnected(ClientSpecs *)));
+            connect(ts,SIGNAL(signalClientConnected(MessageStruct *)),
+                    this,SLOT(slotClientConnected(MessageStruct *)));
             connect(this, SIGNAL(startSignalServer()), ts, SLOT(Start()));
             connect(ts, SIGNAL(connectionError(const char*)), this,
                     SLOT(error(const char*)));
