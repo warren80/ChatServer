@@ -9,6 +9,7 @@ MainWindow::MainWindow(QWidget *parent) :
 {
     ui->setupUi(this);
 
+    printF(QString("Error Log will be saved to: errorLog"));
     connect(ui->sendButton, SIGNAL(clicked()), this, SLOT(sendMessage()));
     enableChat(false);
 }
@@ -92,7 +93,6 @@ void MainWindow::on_actionConnect_triggered() {
             qDebug("Server");
             setWindowTitle("Los Ostrich - Server");
             printF(QString("Server Log will be saved to: log"));
-            printF(QString("Error Log will be saved to: errorLog"));
 
             qDebug(QString::number(settings->port).toLatin1().data());
 

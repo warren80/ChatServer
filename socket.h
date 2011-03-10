@@ -48,7 +48,10 @@ private:
     int SetupSocket(const char*);
     void writeToEveryoneElse(int maxi, int client[FD_SETSIZE],
              int recieveSocketDescriptor, MessageStruct * mesg);
+    void writeToLog(QFile*, QString);
 
+    QFile *log_;
+    QFile *errorLog_;
     int buflen_;
     int socketType_;
     int sPort_;
