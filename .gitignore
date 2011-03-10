@@ -1,5 +1,7 @@
 *.o
-Makefile
+*Makefile*
 ChatServer
 moc_*
 ChatServer.pro.user
+val.log
+
