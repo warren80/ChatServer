@@ -257,6 +257,7 @@ int SocketClass::rx(PMESSAGESTRUCT mesg) {
         case TCP:
             n = recv(socketDescriptor_, mesg, bytesToRead, 0);
             if (n == -1) {
+                qDebug(mesg->data);
                 qDebug ("Rx(): recv(): error");
                 return -1;
             }
