@@ -7,8 +7,8 @@
 #include "textServer.h"
 #include "settings.h"
 #include "thread.h"
+#include "socket.h"
 
-#define BUFSIZE 1072
 
 namespace Ui {
     class MainWindow;
@@ -33,8 +33,8 @@ private:
     TextClient *tc_;
 
 public slots:
-    void slotClientConnected(PCLIENTSPECS);
-    void slotTextRecieved(PMESGSPECS);
+    void slotClientConnected(ClientSpecs *);
+    void slotTextRecieved(MesgSpecs *);
 
 private slots:
     void on_actionConnect_triggered();

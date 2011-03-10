@@ -5,13 +5,11 @@
 #include "socket.h"
 #include "component.h"
 
-typedef struct MesgSpecs {
+struct MesgSpecs {
     MesgSpecs():sender(0), data(0){}
     const char *sender;
     const char *data;
-}MESGSPECS, *PMESGSPECS;
-Q_DECLARE_METATYPE(MESGSPECS);
-Q_DECLARE_METATYPE(PMESGSPECS);
+};
 
 class TextClient : public Component {
     Q_OBJECT
@@ -23,7 +21,7 @@ public:
 public slots:
     virtual void Start();
 signals:
-    void signalTextRecieved(PMESGSPECS);
+    void signalTextRecieved(MesgSpecs *);
 private:
     char *ip_;
     char *alias_;

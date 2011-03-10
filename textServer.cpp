@@ -11,7 +11,7 @@
 
 TextServer::TextServer(int port, int bufsize)
     : Component(port, bufsize) {
-    pSocket_ = new SocketClass(TCP, port_, bufSize_);
+    pSocket_ = new SocketClass(TCP, port_);
 
     connect(pSocket_, SIGNAL(SignalClientConnected(char*)),
             this, SLOT(slotClientConnect(char*)));
@@ -32,7 +32,7 @@ TextServer::~TextServer() {
 }
 
 void TextServer::slotClientConnect(char *ipAddr) {
-    PCLIENTSPECS client = new CLIENTSPECS;
+    ClientSpecs * client = new ClientSpecs;
     client->ipAddr = ipAddr;
 
     emit signalClientConnected(client);

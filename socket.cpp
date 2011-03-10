@@ -1,11 +1,10 @@
 #include "socket.h"
 #include <errno.h>
 
-SocketClass::SocketClass(int type, int port, int packetSize)
-{
+SocketClass::SocketClass(int type, int port) {
     sPort_ = port;
     socketType_ = type;
-    buflen_ = sizeof(MESSAGESTRUCT);
+    buflen_ = sizeof(MessageStruct);
    // if (socketDescriptor_ != 0) {
    //     qDebug("Socket(): calling constructor more than once");
    //     return;
@@ -43,8 +42,8 @@ int SocketClass::TCPServer() {
     struct sockaddr_in clientAddr;
     fd_set allset, rset;
 
-    PMESSAGESTRUCT tempMesg;
-    PMESSAGESTRUCT mesg = new MESSAGESTRUCT();
+    MessageStruct * tempMesg;
+    MessageStruct * mesg = new MessageStruct();
 
     //bind(socketDescriptor_, (struct sockaddr *)&client_ , sizeof(client_)) == -1)
     if(bind(socketDescriptor_, (struct sockaddr *) &server_,
@@ -220,7 +219,7 @@ void SocketClass::createUDPSocket() {
     }
 }
 
-int SocketClass::tx(PMESSAGESTRUCT mesg, int length) {
+int SocketClass::tx(MessageStruct * mesg, int length) {
     switch (socketType_) {
     case TCP:
         return send(socketDescriptor_, mesg, length, 0);
@@ -233,11 +232,11 @@ int SocketClass::tx(PMESSAGESTRUCT mesg, int length) {
     }
 }
 
-int SocketClass::tx(PMESSAGESTRUCT mesg) {
-    return tx(mesg, sizeof(MESSAGESTRUCT));
+int SocketClass::tx(MessageStruct * mesg) {
+    return tx(mesg, sizeof(MessageStruct));
 }
 
-int SocketClass::tx(PMESSAGESTRUCT mesg, int length, int socketDescriptor) {
+int SocketClass::tx(MessageStruct * mesg, int length, int socketDescriptor) {
     switch (socketType_) {
     case TCP:
         qDebug(QString::number(socketDescriptor).toLatin1().data());
@@ -251,7 +250,7 @@ int SocketClass::tx(PMESSAGESTRUCT mesg, int length, int socketDescriptor) {
     }
 }
 
-int SocketClass::rx(PMESSAGESTRUCT mesg) {
+int SocketClass::rx(MessageStruct * mesg) {
     int n = 0;
     int bytesToRead = buflen_;
 

@@ -16,30 +16,28 @@
 #define TCP 1
 #define UDP 2
 
+#define BUFSIZE     1024
+#define IPADDRSIZE  16
+#define ALIASSIZE   32
 
-
-typedef struct MessageStruct {
+struct MessageStruct {
     int mesgType; //0 text, 1 voice, 2 stream, 3 file
     char ipAddr[16];
     char alias[32];
-    char data[1024]; //1072
-} MESSAGESTRUCT, *PMESSAGESTRUCT;
-Q_DECLARE_METATYPE(MESSAGESTRUCT);
-Q_DECLARE_METATYPE(PMESSAGESTRUCT);
-//qRegisterMetaType("MessageStruct");
-//qRegisterMetaTypeStreamOperator("MessageStruct");
+    char data[BUFSIZE - IPADDRSIZE - ALIASSIZE];
+};
 
 class SocketClass : public QObject {
     Q_OBJECT
 public:
-    SocketClass(int, int, int);
+    SocketClass(int, int);
     int SetAsClient(const char*);
     int SetAsServer();
 
-    int tx(PMESSAGESTRUCT, int);
-    int tx(PMESSAGESTRUCT);
-    int tx(PMESSAGESTRUCT, int, int);
-    int rx(PMESSAGESTRUCT);
+    int tx(MessageStruct *, int);
+    int tx(MessageStruct *);
+    int tx(MessageStruct *, int, int);
+    int rx(MessageStruct *);
     void closeSocket();
 private:
     void createTCPSocket();

@@ -4,7 +4,7 @@
 
 TextClient::TextClient(char *ip, char *alias, int port, int bufsize)
     : Component(port, bufsize) {
-    pSocket_ = new SocketClass(TCP, port, bufsize);
+    pSocket_ = new SocketClass(TCP, port);
     ip_ = new char[strlen(ip)];
     alias_ = new char[strlen(alias)];
 
@@ -14,8 +14,8 @@ TextClient::TextClient(char *ip, char *alias, int port, int bufsize)
 
 void TextClient::Start() {
     qDebug("Client Started");
-    PMESGSPECS mesg;
-    PMESSAGESTRUCT rxMesg = new MESSAGESTRUCT;
+    MesgSpecs * mesg;
+    MessageStruct * rxMesg = new MessageStruct;
 
     if(pSocket_->SetAsClient(ip_) == -1) {
         emit connectionError("Cannont connect to server.\n Try again later.");
@@ -25,7 +25,7 @@ void TextClient::Start() {
     }
 
     while (pSocket_->rx(rxMesg) > 0) {
-        mesg = new MESGSPECS;
+        mesg = new MesgSpecs;
 
         if(strcmp(rxMesg->alias, "Local") == 0) {
             mesg->sender = rxMesg->alias;
@@ -41,7 +41,7 @@ void TextClient::Start() {
 }
 
 void TextClient::txMessage(const QString str) { //this function is in the gui thread and thats as planned
-    PMESSAGESTRUCT txMesg = new MESSAGESTRUCT;
+    MessageStruct * txMesg = new MessageStruct;
 
     qDebug(str.toLatin1().data());
 

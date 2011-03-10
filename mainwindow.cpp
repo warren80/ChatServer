@@ -13,7 +13,7 @@ MainWindow::MainWindow(QWidget *parent) :
     enableChat(false);
 }
 
-void MainWindow::slotClientConnected(PCLIENTSPECS client) {
+void MainWindow::slotClientConnected(ClientSpecs * client) {
     qDebug("Client connected");
     printF("Conncted: " + QString(client->ipAddr) + "~"
            + QTime::currentTime().toString());
@@ -21,7 +21,7 @@ void MainWindow::slotClientConnected(PCLIENTSPECS client) {
     delete client;
 }
 
-void MainWindow::slotTextRecieved(PMESGSPECS mesg) {
+void MainWindow::slotTextRecieved(MesgSpecs * mesg) {
     qDebug("Client received a message");
     printF(QString(mesg->sender) + ": (" + QTime::currentTime().toString()
            + ")\n" + QString(mesg->data) + "\n");
