@@ -259,8 +259,9 @@ int SocketClass::rx(PMESSAGESTRUCT mesg) {
         switch (socketType_) {
         case TCP:
             n = recv(socketDescriptor_, mesg, bytesToRead, 0);
+            qDebug(mesg->data);
             if (n == -1) {
-                qDebug(QString::number(errno).toLatin1().data());
+                qDebug(mesg->data);
                 qDebug ("Rx(): recv(): error");
                 return -1;
             }

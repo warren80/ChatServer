@@ -10,6 +10,8 @@ typedef struct MesgSpecs {
     const char *sender;
     const char *data;
 }MESGSPECS, *PMESGSPECS;
+Q_DECLARE_METATYPE(MESGSPECS);
+Q_DECLARE_METATYPE(PMESGSPECS);
 
 class TextClient : public Component {
     Q_OBJECT

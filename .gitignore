@@ -1,0 +1,4 @@
+*.o
+Makefile
+ChatServer
+moc_*
