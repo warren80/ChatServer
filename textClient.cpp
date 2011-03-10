@@ -13,6 +13,7 @@ TextClient::TextClient(char *ip, char *alias, int port, int bufsize)
 }
 
 void TextClient::Start() {
+    int n;
     qDebug("Client Started");
     PMESGSPECS mesg;
     PMESSAGESTRUCT rxMesg = new MESSAGESTRUCT;
