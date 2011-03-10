@@ -14,7 +14,6 @@ TextClient::TextClient(char *ip, char *alias, int port, int bufsize)
 
 void TextClient::Start() {
     qDebug("Client Started");
-    MesgSpecs * mesg;
     MessageStruct * rxMesg = new MessageStruct;
 
     if(pSocket_->SetAsClient(ip_) == -1) {
@@ -25,15 +24,8 @@ void TextClient::Start() {
     }
 
     while (pSocket_->rx(rxMesg) > 0) {
-        mesg = new MesgSpecs;
-
-        if(strcmp(rxMesg->alias, "Local") == 0) {
-            mesg->sender = rxMesg->alias;
-        } else {
-            mesg->sender = rxMesg->ipAddr;
-        }
-
-        emit signalTextRecieved(mesg);
+        emit signalTextRecieved(rxMesg);
+        rxMesg = new MessageStruct;
     }
 
     pSocket_->closeSocket();

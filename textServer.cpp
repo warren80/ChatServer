@@ -32,8 +32,8 @@ TextServer::~TextServer() {
 }
 
 void TextServer::slotClientConnect(char *ipAddr) {
-    ClientSpecs * client = new ClientSpecs;
-    client->ipAddr = ipAddr;
+    MessageStruct * client = new MessageStruct;
+    strncpy(client->ipAddr, ipAddr, IPADDRSIZE);
 
     emit signalClientConnected(client);
 }

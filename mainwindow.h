@@ -33,8 +33,8 @@ private:
     TextClient *tc_;
 
 public slots:
-    void slotClientConnected(ClientSpecs *);
-    void slotTextRecieved(MesgSpecs *);
+    void slotClientConnected(MessageStruct *);
+    void slotTextRecieved(MessageStruct *);
 
 private slots:
     void on_actionConnect_triggered();
