@@ -14,6 +14,7 @@
 #include <QtGui/QAction>
 #include <QtGui/QApplication>
 #include <QtGui/QButtonGroup>
+#include <QtGui/QCheckBox>
 #include <QtGui/QDialog>
 #include <QtGui/QDialogButtonBox>
 #include <QtGui/QGroupBox>
@@ -39,17 +40,18 @@ public:
     QLineEdit *ipText;
     QLabel *aliasLabel;
     QLineEdit *aliasText;
+    QCheckBox *logChatBox;
     QWidget *widget;
 
     void setupUi(QDialog *Settings)
     {
         if (Settings->objectName().isEmpty())
             Settings->setObjectName(QString::fromUtf8("Settings"));
-        Settings->resize(500, 221);
+        Settings->resize(500, 239);
         Settings->setStyleSheet(QString::fromUtf8(""));
         okCancel = new QDialogButtonBox(Settings);
         okCancel->setObjectName(QString::fromUtf8("okCancel"));
-        okCancel->setGeometry(QRect(50, 180, 181, 32));
+        okCancel->setGeometry(QRect(50, 200, 181, 32));
         okCancel->setOrientation(Qt::Horizontal);
         okCancel->setStandardButtons(QDialogButtonBox::Cancel|QDialogButtonBox::Ok);
         portText = new QLineEdit(Settings);
@@ -66,7 +68,7 @@ public:
         portLabel->setGeometry(QRect(10, 20, 41, 17));
         serviceBox = new QGroupBox(Settings);
         serviceBox->setObjectName(QString::fromUtf8("serviceBox"));
-        serviceBox->setGeometry(QRect(20, 130, 201, 51));
+        serviceBox->setGeometry(QRect(20, 150, 201, 51));
         clientButton = new QRadioButton(serviceBox);
         clientButton->setObjectName(QString::fromUtf8("clientButton"));
         clientButton->setGeometry(QRect(10, 20, 117, 22));
@@ -79,7 +81,7 @@ public:
         serverButton->setGeometry(QRect(110, 20, 117, 22));
         clientBox = new QGroupBox(Settings);
         clientBox->setObjectName(QString::fromUtf8("clientBox"));
-        clientBox->setGeometry(QRect(20, 50, 201, 71));
+        clientBox->setGeometry(QRect(20, 50, 201, 91));
         ipLabel = new QLabel(clientBox);
         ipLabel->setObjectName(QString::fromUtf8("ipLabel"));
         ipLabel->setGeometry(QRect(10, 20, 21, 17));
@@ -100,9 +102,12 @@ public:
 "border-radius: 8px;\n"
 "padding-left: 2px;\n"
 "padding-right: 2px;"));
+        logChatBox = new QCheckBox(clientBox);
+        logChatBox->setObjectName(QString::fromUtf8("logChatBox"));
+        logChatBox->setGeometry(QRect(10, 70, 96, 22));
         widget = new QWidget(Settings);
         widget->setObjectName(QString::fromUtf8("widget"));
-        widget->setGeometry(QRect(240, 0, 261, 221));
+        widget->setGeometry(QRect(240, 0, 261, 241));
         widget->setStyleSheet(QString::fromUtf8("background: url(./ostrichSettingsBG.png);"));
         QWidget::setTabOrder(portText, ipText);
         QWidget::setTabOrder(ipText, clientButton);
@@ -128,6 +133,7 @@ public:
         ipLabel->setText(QApplication::translate("Settings", "IP:", 0, QApplication::UnicodeUTF8));
         aliasLabel->setText(QApplication::translate("Settings", "Alias:", 0, QApplication::UnicodeUTF8));
         aliasText->setText(QString());
+        logChatBox->setText(QApplication::translate("Settings", "Log Chat", 0, QApplication::UnicodeUTF8));
     } // retranslateUi
 
 };

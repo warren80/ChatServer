@@ -9,6 +9,7 @@ typedef struct ConnSettings {
     QString alias;
     int port;
     bool isClient;
+    bool logChat;
 } SETTINGS, *PSETTINGS;
 
 namespace Ui {

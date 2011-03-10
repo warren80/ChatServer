@@ -35,6 +35,7 @@ void Settings::storeSettings() {
     if((settings->isClient = ui->clientButton->isChecked())) {
         settings->ipAddr = ui->ipText->text();
         settings->alias = ui->aliasText->text();
+        settings->logChat = ui->logChatBox->isChecked();
     }
 }
 
