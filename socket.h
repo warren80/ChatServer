@@ -11,6 +11,8 @@
 #include <netinet/in.h>
 #include <arpa/inet.h>
 
+#include <QtGui>
+
 #define TCP 1
 #define UDP 2
 
@@ -22,8 +24,10 @@ typedef struct MessageStruct {
     char alias[32];
     char data[1024]; //1072
 } MESSAGESTRUCT, *PMESSAGESTRUCT;
+Q_DECLARE_METATYPE(MESSAGESTRUCT);
 Q_DECLARE_METATYPE(PMESSAGESTRUCT);
-
+//qRegisterMetaType("MessageStruct");
+//qRegisterMetaTypeStreamOperator("MessageStruct");
 
 class SocketClass : public QObject {
     Q_OBJECT

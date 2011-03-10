@@ -9,6 +9,8 @@ typedef struct ClientSpecs {
     ClientSpecs():ipAddr(0){}
     char *ipAddr;
 }CLIENTSPECS, *PCLIENTSPECS;
+Q_DECLARE_METATYPE(CLIENTSPECS);
+Q_DECLARE_METATYPE(PCLIENTSPECS);
 
 class TextServer : public Component {
     Q_OBJECT
