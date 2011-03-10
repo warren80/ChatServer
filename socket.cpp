@@ -67,8 +67,8 @@ int SocketClass::TCPServer() {
     if(bind(socketDescriptor_, (struct sockaddr *) &server_,
             sizeof(server_)) == -1) {
         qDebug("TCPServer(): bind");
-        writeToLog(errorLog_, QString("TCPServer(): bind - " + QString::number(errno)
-                                      + "(" + QTime::currentTime().toString() + ")"));
+        writeToLog(errorLog_, QString("TCPServer(): bind - Errno(" + QString::number(errno)
+                                      + " ~ " + QTime::currentTime().toString() + ")"));
         return -1;
     }
 
@@ -93,8 +93,8 @@ int SocketClass::TCPServer() {
                                               (struct sockaddr *) &clientAddr,
                                               &clientLength)) == -1) {
                 qDebug("TCPServer(): accept");
-                writeToLog(errorLog_, QString("TCPServer(): accept - " + QString::number(errno)
-                                              + "(" + QTime::currentTime().toString() + ")"));
+                writeToLog(errorLog_, QString("TCPServer(): accept - Errno(" + QString::number(errno)
+                                              + " ~ " + QTime::currentTime().toString() + ")"));
                 return -1;
             }
            qDebug("TCPServer(): connection accepted %s ",
@@ -193,6 +193,8 @@ int SocketClass::SetupSocket(const char * str) {
     if (str != 0) {
         if ((hp = gethostbyname(str)) == NULL) {
             qDebug("SetupSocket(): getHostByName(): No such server available.");
+            writeToLog(errorLog_, QString("SetupSocket(): getHostByName - Errno(" + QString::number(errno)
+                                          + " ~ " + QTime::currentTime().toString() + ")"));
             return -1;
         }
         bcopy(hp->h_addr, (char *)&server_.sin_addr, hp->h_length);
@@ -223,6 +225,8 @@ int SocketClass::SetAsClient(const char * str) {
                       sizeof(server_)) == -1) {
             qDebug(QString::number(errno).toLatin1().data());
             qDebug("SetAsClient(): failure to connect to port");
+            writeToLog(errorLog_, QString("SetAsClient(): connect - Errno(" + QString::number(errno)
+                                          + " ~ " + QTime::currentTime().toString() + ")"));
             return -1;
         }
         break;
@@ -235,10 +239,14 @@ void SocketClass::createTCPSocket() {
     int arg = 1;
     if ((socketDescriptor_ = socket(AF_INET, SOCK_STREAM, 0)) == -1) {
             qDebug("createTCPSocket(): Cannot Create Socket");
+            writeToLog(errorLog_, QString("createTCPSocket(): socket - Errno(" + QString::number(errno)
+                                          + " ~ " + QTime::currentTime().toString() + ")"));
     }
     if (setsockopt (socketDescriptor_, SOL_SOCKET, SO_REUSEADDR, &arg,
                     sizeof(arg)) == -1) {
-            qDebug("createTCPSocket(): setsockopt");
+        writeToLog(errorLog_, QString("TCPServer(): setsockopt - Errno(" + QString::number(errno)
+                                      + " ~ " + QTime::currentTime().toString() + ")"));
+        qDebug("createTCPSocket(): setsockopt");
     }
     qDebug("createTCPSocket(): Socket Created");
     return;
@@ -256,9 +264,14 @@ void SocketClass::createUDPSocket() {
 }
 
 int SocketClass::tx(MessageStruct * mesg, int length) {
+    int temp;
     switch (socketType_) {
     case TCP:
-        return send(socketDescriptor_, mesg, length, 0);
+        if((temp = send(socketDescriptor_, mesg, length, 0)) == -1) {
+            writeToLog(errorLog_, QString("tx(): send - Errno(" + QString::number(errno)
+                                          + " ~ " + QTime::currentTime().toString() + ")"));
+        }
+        return temp;
     case UDP:
         return sendto(socketDescriptor_, mesg, length, 0,
                       (struct sockaddr *) &server_, serverLength_);
@@ -273,10 +286,15 @@ int SocketClass::tx(MessageStruct * mesg) {
 }
 
 int SocketClass::tx(MessageStruct * mesg, int length, int socketDescriptor) {
+    int temp;
     switch (socketType_) {
     case TCP:
         qDebug(QString::number(socketDescriptor).toLatin1().data());
-        return send(socketDescriptor, mesg, length, 0);
+        if((temp = send(socketDescriptor, mesg, length, 0)) == -1) {
+            writeToLog(errorLog_, QString("tx(): send - Errno(" + QString::number(errno)
+                                          + " ~ " + QTime::currentTime().toString() + ")"));
+        }
+        return -1;
     case UDP:
         return sendto(socketDescriptor, mesg, length, 0,
                       (struct sockaddr*)&server_, serverLength_);
@@ -298,6 +316,8 @@ int SocketClass::rx(MessageStruct * mesg) {
             if (n == -1) {
                 qDebug(mesg->data);
                 qDebug ("Rx(): recv(): error");
+                writeToLog(errorLog_, QString("rx(): recv - Errno(" + QString::number(errno)
+                                              + " ~ " + QTime::currentTime().toString() + ")"));
                 return -1;
             }
             if (n == 0) {

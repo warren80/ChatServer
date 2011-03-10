@@ -9,7 +9,6 @@ MainWindow::MainWindow(QWidget *parent) :
 {
     ui->setupUi(this);
 
-    printF(QString("Error Log will be saved to: errorLog"));
     connect(ui->sendButton, SIGNAL(clicked()), this, SLOT(sendMessage()));
     enableChat(false);
 }
@@ -58,6 +57,7 @@ void MainWindow::on_actionConnect_triggered() {
     settings = settingsDiag->getSettings();
 
     if(settingsDiag->result()) {
+        printF(QString("Error Log will be saved to: errorLog"));
         //TODO: Connect to server/Listen for clients
         if(settings->isClient) {
             qDebug("Client");
