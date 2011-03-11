@@ -36,7 +36,6 @@ void MainWindow::slotServerClosed() {
         } else {
             ts_->getSocket()->closeSocket();
             ts_->deleteLater();
-            textServer->wait();
             textServer->terminate();
             textServer->deleteLater();
         }
@@ -180,7 +179,6 @@ void MainWindow::on_actionDisconnect_triggered() {
         } else {
             ts_->getSocket()->closeSocket();
             ts_->deleteLater();
-            textServer->wait();
             textServer->terminate();
             textServer->deleteLater();
         }
