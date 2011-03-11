@@ -11,7 +11,6 @@ MainWindow::MainWindow(QWidget *parent) :
     ui->setupUi(this);
 
     connect(ui->sendButton, SIGNAL(clicked()), this, SLOT(sendMessage()));
-    enableChat(false);
 
     connected_ = false;
 }
@@ -25,11 +24,10 @@ void MainWindow::slotTextRecieved(MessageStruct * mesg) {
 
 void MainWindow::slotServerClosed() {
     if(connected_) {
-
+        enableChat(false);
         connected_ = false;
         emit signalDisconnect();
         printF("Client Disconnected.");
-
         if(settings->logChat) {
             saveChat();
         }
@@ -37,7 +35,7 @@ void MainWindow::slotServerClosed() {
 }
 
 MainWindow::~MainWindow()
-{
+{    enableChat(false);
     delete ui;
 }
 
@@ -157,6 +155,7 @@ void MainWindow::success(const char *message) {
 
 void MainWindow::on_actionDisconnect_triggered() {
     if(connected_) {
+        enableChat(false);
         connected_ = false;
         if(settings->logChat) {
             saveChat();

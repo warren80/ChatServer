@@ -34,7 +34,6 @@ void TextClient::txMessage(const QString str) { //this function is in the gui th
     MessageStruct * txMesg = new MessageStruct;
 
     qDebug(str.toLatin1().data());
-
     strncpy(txMesg->data, str.toLatin1().data(), BUFSIZE - IPADDRSIZE -ALIASSIZE );
     strncpy(txMesg->ipAddr,ip_,IPADDRSIZE);
     strncpy(txMesg->alias,alias_, ALIASSIZE);
