@@ -2,6 +2,7 @@
 #include "ui_mainwindow.h"
 #include <QDateTime>
 #include <QMessageBox>
+#include <QFile>
 
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
@@ -11,6 +12,8 @@ MainWindow::MainWindow(QWidget *parent) :
 
     connect(ui->sendButton, SIGNAL(clicked()), this, SLOT(sendMessage()));
     enableChat(false);
+
+    connected_ = false;
 }
 
 void MainWindow::slotTextRecieved(MessageStruct * mesg) {
@@ -18,6 +21,19 @@ void MainWindow::slotTextRecieved(MessageStruct * mesg) {
     printF(QString(mesg->alias) + ": (" + QTime::currentTime().toString()
            + ")\n" + QString(mesg->data) + "\n");
     delete mesg;
+}
+
+void MainWindow::slotServerClosed() {
+    if(connected_) {
+
+        connected_ = false;
+        emit signalDisconnect();
+        printF("Client Disconnected.");
+
+        if(settings->logChat) {
+            saveChat();
+        }
+    }
 }
 
 MainWindow::~MainWindow()
@@ -57,6 +73,7 @@ void MainWindow::on_actionConnect_triggered() {
     settings = settingsDiag->getSettings();
 
     if(settingsDiag->result()) {
+        connected_ = true;
         printF(QString("Error Log will be saved to: errorLog"));
         //TODO: Connect to server/Listen for clients
         if(settings->isClient) {
@@ -86,6 +103,8 @@ void MainWindow::on_actionConnect_triggered() {
                     SLOT(error(const char*)));
             connect(tc_, SIGNAL(success(const char*)), this,
                     SLOT(success(const char*)));
+            connect(tc_, SIGNAL(signalServerClosed()), this, SLOT(slotServerClosed()));
+            connect(this, SIGNAL(signalDisconnect()), tc_, SLOT(Stop()));
 
             tc_->moveToThread(textClient);
             emit startSignalClient();
@@ -106,6 +125,7 @@ void MainWindow::on_actionConnect_triggered() {
                     SLOT(error(const char*)));
             connect(ts, SIGNAL(success(const char*)), this,
                     SLOT(success(const char*)));
+            connect(this, SIGNAL(signalDisconnect()), ts, SLOT(Stop()));
 
             ts->moveToThread(textServer);
             emit startSignalServer();
@@ -133,4 +153,30 @@ void MainWindow::success(const char *message) {
     }
     QMessageBox::QMessageBox(QMessageBox::NoIcon, "Success", mesg,
                              QMessageBox::Ok, this).exec();
+}
+
+void MainWindow::on_actionDisconnect_triggered() {
+    if(connected_) {
+        connected_ = false;
+        if(settings->logChat) {
+            saveChat();
+        }
+        qDebug("Disconnecting");
+        emit signalDisconnect();
+    }
+}
+
+void MainWindow::saveChat() {
+    qDebug("Saving chat");
+    QFile *chatLog = new QFile(QString("chatLog(") + QDateTime::currentDateTime().toString().toLatin1() + QString(")"));
+
+    chatLog->open(QIODevice::Append);
+    chatLog->write(QString("Chat Log ~ " + QDateTime::currentDateTime().toString()
+                           + "\n").toLatin1().data());
+    chatLog->write(ui->chatScreen->toPlainText().toLatin1().data());
+    chatLog->close();
+
+    printF(QString("Chat log saved to: ") + chatLog->fileName());
+
+    delete chatLog;
 }

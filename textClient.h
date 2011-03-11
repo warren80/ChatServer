@@ -20,10 +20,15 @@ public:
     TextClient(char*, char*, int, int) ;
     ~TextClient();
     void txMessage(const QString);
+
 public slots:
     virtual void Start();
+    virtual void Stop();
+
 signals:
     void signalTextRecieved(MessageStruct *);
+    void signalServerClosed();
+
 private:
     char *ip_;
     char *alias_;

@@ -18,8 +18,11 @@ class TextServer : public Component {
 public:
     TextServer(int, int);
     ~TextServer();
+
 public slots:
     virtual void Start();
+    virtual void Stop();
+
 signals:
     void connectionError(const char*);
 

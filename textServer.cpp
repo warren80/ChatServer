@@ -1,13 +1,4 @@
 #include "textServer.h"
-#include <stdio.h>
-#include <sys/types.h>
-#include <sys/socket.h>
-#include <netinet/in.h>
-#include <stdlib.h>
-#include <strings.h>
-#include <arpa/inet.h>
-#include <unistd.h>
-
 
 TextServer::TextServer(int port, int bufsize)
     : Component(port, bufsize) {
@@ -22,4 +13,9 @@ void TextServer::Start() {
 
 TextServer::~TextServer() {
     delete pSocket_;
+}
+
+void TextServer::Stop() {
+    qDebug("Server Disonnected");
+    pSocket_->closeSocket();
 }

@@ -1,6 +1,4 @@
 #include "textClient.h"
-#include <QDebug>
-#include <QMessageBox>
 
 TextClient::TextClient(char *ip, char *alias, int port, int bufsize)
     : Component(port, bufsize) {
@@ -46,6 +44,11 @@ void TextClient::txMessage(const QString str) { //this function is in the gui th
     }
 
     delete txMesg;
+}
+
+void TextClient::Stop() {
+    qDebug("Client Disconnected");
+    pSocket_->closeSocket();
 }
 
 TextClient::~TextClient() {

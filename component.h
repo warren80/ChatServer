@@ -9,6 +9,7 @@ class Component : public QObject
 public:
     Component(int port, int bufSize);
     virtual void Start() = 0;
+    virtual void Stop() = 0;
 
 protected:
     int bufSize_;
@@ -17,8 +18,6 @@ protected:
 signals:
     void connectionError(const char*);
     void success(const char*);
-
-public slots:
 
 };
 

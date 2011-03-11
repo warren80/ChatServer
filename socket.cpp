@@ -314,7 +314,6 @@ int SocketClass::rx(MessageStruct * mesg) {
             n = recv(socketDescriptor_, mesg, bytesToRead, 0);
             qDebug(mesg->data);
             if (n == -1) {
-                qDebug(mesg->data);
                 qDebug ("Rx(): recv(): error");
                 writeToLog(errorLog_, QString("\nrx(): recv - Errno(" + QString::number(errno)
                                               + " ~ " + QTime::currentTime().toString() + ")"));
