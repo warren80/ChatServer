@@ -30,14 +30,15 @@ void MainWindow::slotServerClosed() {
 
         if(settings->isClient) {
             tc_->getSocket()->closeSocket();
-            tc_->deleteLater();
+            delete tc_;
             textClient->wait();
-            textClient->deleteLater();
+            delete textClient;
         } else {
             ts_->getSocket()->closeSocket();
             ts_->deleteLater();
+            delete ts_;
             textServer->wait();
-            textServer->deleteLater();
+            delete textServer;
         }
 
         printF("Client Disconnected.");
@@ -54,6 +55,7 @@ MainWindow::~MainWindow()
 
 void MainWindow::sendMessage() {
     QString message = ui->typeScreen->toPlainText();
+
     if(message != "") {
         tc_->txMessage(message);
         printF(settings->alias + ": (" + QTime::currentTime().toString()
@@ -173,13 +175,14 @@ void MainWindow::on_actionDisconnect_triggered() {
         if(settings->isClient) {
             tc_->getSocket()->closeSocket();
             tc_->deleteLater();
+            delete tc_;
             textClient->wait();
-            textClient->deleteLater();
+            delete textClient;
         } else {
             ts_->getSocket()->closeSocket();
-            ts_->deleteLater();
+            delete ts_;
             textServer->wait();
-            textServer->deleteLater();
+            delete textServer;
         }
 
         if(settings->logChat) {
