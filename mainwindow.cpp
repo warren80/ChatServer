@@ -30,14 +30,10 @@ void MainWindow::slotServerClosed() {
 
         if(settings->isClient) {
             tc_->getSocket()->closeSocket();
-            tc_->deleteLater();
             textClient->terminate();
-            textClient->deleteLater();
         } else {
             ts_->getSocket()->closeSocket();
-            ts_->deleteLater();
             textServer->terminate();
-            textServer->deleteLater();
         }
 
         printF("Client Disconnected.");
@@ -173,14 +169,10 @@ void MainWindow::on_actionDisconnect_triggered() {
 
         if(settings->isClient) {
             tc_->getSocket()->closeSocket();
-            tc_->deleteLater();
             textClient->terminate();
-            textClient->deleteLater();
         } else {
             ts_->getSocket()->closeSocket();
-            ts_->deleteLater();
             textServer->terminate();
-            textServer->deleteLater();
         }
 
         if(settings->logChat) {
