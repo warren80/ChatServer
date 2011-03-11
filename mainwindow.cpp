@@ -31,10 +31,12 @@ void MainWindow::slotServerClosed() {
         if(settings->isClient) {
             tc_->getSocket()->closeSocket();
             tc_->deleteLater();
+            textClient->wait();
             textClient->deleteLater();
         } else {
             ts_->getSocket()->closeSocket();
             ts_->deleteLater();
+            textClient->wait();
             textServer->deleteLater();
         }
 
@@ -171,10 +173,12 @@ void MainWindow::on_actionDisconnect_triggered() {
         if(settings->isClient) {
             tc_->getSocket()->closeSocket();
             tc_->deleteLater();
+            textClient->wait();
             textClient->deleteLater();
         } else {
             ts_->getSocket()->closeSocket();
             ts_->deleteLater();
+            textClient->wait();
             textServer->deleteLater();
         }
 
