@@ -45,14 +45,13 @@ void TextClient::txMessage(const QString str) { //this function is in the gui th
     delete txMesg;
 }
 
-void TextClient::Stop() {
-    qDebug("Client Disconnected");
-    pSocket_->closeSocket();
-}
-
 TextClient::~TextClient() {
     delete ip_;
     delete alias_;
     delete pSocket_;
+}
+
+SocketClass* TextClient::getSocket() {
+    return pSocket_;
 }
 

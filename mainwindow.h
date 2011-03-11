@@ -30,6 +30,7 @@ private:
     Thread * textServer;
     PSETTINGS settings;
     TextClient *tc_;
+    TextServer *ts_;
     bool connected_;
 
 public slots:
@@ -47,7 +48,6 @@ private slots:
 signals:
     void startSignalClient();
     void startSignalServer();
-    void signalDisconnect();
     void sendMessage(const QString);
 };
 

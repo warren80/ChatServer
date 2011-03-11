@@ -15,7 +15,6 @@ TextServer::~TextServer() {
     delete pSocket_;
 }
 
-void TextServer::Stop() {
-    qDebug("Server Disonnected");
-    pSocket_->closeSocket();
+SocketClass* TextServer::getSocket() {
+    return pSocket_;
 }

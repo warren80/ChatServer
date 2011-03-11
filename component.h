@@ -9,7 +9,6 @@ class Component : public QObject
 public:
     Component(int port, int bufSize);
     virtual void Start() = 0;
-    virtual void Stop() = 0;
 
 protected:
     int bufSize_;

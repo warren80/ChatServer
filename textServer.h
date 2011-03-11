@@ -18,10 +18,10 @@ class TextServer : public Component {
 public:
     TextServer(int, int);
     ~TextServer();
+    SocketClass* getSocket();
 
 public slots:
     virtual void Start();
-    virtual void Stop();
 
 signals:
     void connectionError(const char*);

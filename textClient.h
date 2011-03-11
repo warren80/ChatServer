@@ -20,10 +20,10 @@ public:
     TextClient(char*, char*, int, int) ;
     ~TextClient();
     void txMessage(const QString);
+    SocketClass* getSocket();
 
 public slots:
     virtual void Start();
-    virtual void Stop();
 
 signals:
     void signalTextRecieved(MessageStruct *);

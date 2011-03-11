@@ -12,6 +12,7 @@ MainWindow::MainWindow(QWidget *parent) :
 
     connect(ui->sendButton, SIGNAL(clicked()), this, SLOT(sendMessage()));
 
+    enableChat(false);
     connected_ = false;
 }
 
@@ -26,7 +27,17 @@ void MainWindow::slotServerClosed() {
     if(connected_) {
         enableChat(false);
         connected_ = false;
-        emit signalDisconnect();
+
+        if(settings->isClient) {
+            tc_->getSocket()->closeSocket();
+            tc_->deleteLater();
+            textClient->deleteLater();
+        } else {
+            ts_->getSocket()->closeSocket();
+            ts_->deleteLater();
+            textServer->deleteLater();
+        }
+
         printF("Client Disconnected.");
         if(settings->logChat) {
             saveChat();
@@ -41,7 +52,6 @@ MainWindow::~MainWindow()
 
 void MainWindow::sendMessage() {
     QString message = ui->typeScreen->toPlainText();
-
     if(message != "") {
         tc_->txMessage(message);
         printF(settings->alias + ": (" + QTime::currentTime().toString()
@@ -102,7 +112,6 @@ void MainWindow::on_actionConnect_triggered() {
             connect(tc_, SIGNAL(success(const char*)), this,
                     SLOT(success(const char*)));
             connect(tc_, SIGNAL(signalServerClosed()), this, SLOT(slotServerClosed()));
-            connect(this, SIGNAL(signalDisconnect()), tc_, SLOT(Stop()));
 
             tc_->moveToThread(textClient);
             emit startSignalClient();
@@ -113,19 +122,18 @@ void MainWindow::on_actionConnect_triggered() {
 
             qDebug(QString::number(settings->port).toLatin1().data());
 
-            TextServer * ts = new TextServer(settings->port, BUFSIZE);
+            ts_ = new TextServer(settings->port, BUFSIZE);
             textServer = new Thread();
             textServer->start();
 
             //Setting connections of signals
-            connect(this, SIGNAL(startSignalServer()), ts, SLOT(Start()));
-            connect(ts, SIGNAL(connectionError(const char*)), this,
+            connect(this, SIGNAL(startSignalServer()), ts_, SLOT(Start()));
+            connect(ts_, SIGNAL(connectionError(const char*)), this,
                     SLOT(error(const char*)));
-            connect(ts, SIGNAL(success(const char*)), this,
+            connect(ts_, SIGNAL(success(const char*)), this,
                     SLOT(success(const char*)));
-            connect(this, SIGNAL(signalDisconnect()), ts, SLOT(Stop()));
 
-            ts->moveToThread(textServer);
+            ts_->moveToThread(textServer);
             emit startSignalServer();
         }
     } else {
@@ -157,11 +165,22 @@ void MainWindow::on_actionDisconnect_triggered() {
     if(connected_) {
         enableChat(false);
         connected_ = false;
+
+        qDebug("Disconnecting");
+
+        if(settings->isClient) {
+            tc_->getSocket()->closeSocket();
+            tc_->deleteLater();
+            textClient->deleteLater();
+        } else {
+            ts_->getSocket()->closeSocket();
+            ts_->deleteLater();
+            textServer->deleteLater();
+        }
+
         if(settings->logChat) {
             saveChat();
         }
-        qDebug("Disconnecting");
-        emit signalDisconnect();
     }
 }
 
