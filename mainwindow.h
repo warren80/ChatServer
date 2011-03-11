@@ -24,6 +24,9 @@ public:
     void enableChat(bool);
     void saveChat();
 
+protected:
+    void closeEvent(QCloseEvent *);
+
 private:
     Ui::MainWindow *ui;
     Thread * textClient;

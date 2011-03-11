@@ -30,15 +30,15 @@ void MainWindow::slotServerClosed() {
 
         if(settings->isClient) {
             tc_->getSocket()->closeSocket();
-            delete tc_;
-            textClient->wait();
-            delete textClient;
+            tc_->deleteLater();
+            textClient->terminate();
+            textClient->deleteLater();
         } else {
             ts_->getSocket()->closeSocket();
             ts_->deleteLater();
-            delete ts_;
             textServer->wait();
-            delete textServer;
+            textServer->terminate();
+            textServer->deleteLater();
         }
 
         printF("Client Disconnected.");
@@ -175,14 +175,14 @@ void MainWindow::on_actionDisconnect_triggered() {
         if(settings->isClient) {
             tc_->getSocket()->closeSocket();
             tc_->deleteLater();
-            delete tc_;
-            textClient->wait();
-            delete textClient;
+            textClient->terminate();
+            textClient->deleteLater();
         } else {
             ts_->getSocket()->closeSocket();
-            delete ts_;
+            ts_->deleteLater();
             textServer->wait();
-            delete textServer;
+            textServer->terminate();
+            textServer->deleteLater();
         }
 
         if(settings->logChat) {
@@ -204,4 +204,10 @@ void MainWindow::saveChat() {
     printF(QString("Chat log saved to: ") + chatLog->fileName());
 
     delete chatLog;
+}
+
+void MainWindow::closeEvent(QCloseEvent *) {
+    if(settings->logChat) {
+        saveChat();
+    }
 }

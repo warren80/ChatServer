@@ -40,7 +40,7 @@ int SocketClass::SetAsServer() {
         qDebug("SetAsServer(): SetupSocket");
         return -1;
     }
-    return TCPServer();
+    return 1;
 }
 
 int SocketClass::TCPServer() {
@@ -337,6 +337,7 @@ int SocketClass::rx(MessageStruct * mesg) {
 }
 
 void SocketClass::closeSocket() {
+    qDebug("Closing socket");
     close(socketDescriptor_);
 }
 
