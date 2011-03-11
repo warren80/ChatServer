@@ -27,7 +27,6 @@ void TextClient::Start() {
     }
 
     pSocket_->closeSocket();
-   // pSocket->SetAsClient(ip);
 }
 
 void TextClient::txMessage(const QString str) { //this function is in the gui thread and thats as planned

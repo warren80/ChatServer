@@ -40,6 +40,8 @@ int SocketClass::SetAsServer() {
         qDebug("SetAsServer(): SetupSocket");
         return -1;
     }
+
+    TCPServer();
     return 1;
 }
 
@@ -223,8 +225,8 @@ int SocketClass::SetAsClient(const char * str) {
     case TCP:
         if (::connect(socketDescriptor_, (struct sockaddr*)&server_,
                       sizeof(server_)) == -1) {
-            qDebug(QString::number(errno).toLatin1().data());
             qDebug("SetAsClient(): failure to connect to port");
+            qDebug(QString::number(errno).toLatin1().data());
             writeToLog(errorLog_, QString("\nSetAsClient(): connect - Errno(" + QString::number(errno)
                                           + " ~ " + QTime::currentTime().toString() + ")"));
             return -1;
