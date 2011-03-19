@@ -349,7 +349,7 @@ int SocketClass::rx(MessageStruct * mesg) {
 
 void SocketClass::closeSocket() {
     qDebug("Closing socket");
-    close(socketDescriptor_);
+    qDebug(QString::number(close(socketDescriptor_)).toLatin1().data());
 }
 
 void SocketClass::writeToLog(QFile *log, QString logMesg) {

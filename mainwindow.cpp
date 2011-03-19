@@ -30,7 +30,9 @@ void MainWindow::slotServerClosed() {
 
         if(settings->isClient) {
             tc_->getSocket()->closeSocket();
-            tc_->deleteLater();
+            delete tc_;
+            textClient->quit();
+            delete textClient;
         }
 
         printF("Client Disconnected.");
@@ -79,6 +81,7 @@ void MainWindow::on_actionConnect_triggered() {
 
     if(settingsDiag->result()) {
         connected_ = true;
+        ui->chatScreen->clear();
         printF(QString("Error Log will be saved to: errorLog"));
         //TODO: Connect to server/Listen for clients
         if(settings->isClient) {
@@ -96,7 +99,7 @@ void MainWindow::on_actionConnect_triggered() {
             strcpy(ip, settings->ipAddr.toLatin1().data());
             strcpy(alias, settings->alias.toLatin1().data());
 
-            tc_ = new TextClient(ip, alias, settings->port, BUFSIZE);
+            tc_ = new TextClient(ip, alias        , settings->port, BUFSIZE);
             textClient = new Thread();
             textClient->start();
 
@@ -172,10 +175,14 @@ void MainWindow::on_actionDisconnect_triggered() {
 
         if(settings->isClient) {
             tc_->getSocket()->closeSocket();
-            tc_->deleteLater();
+            delete tc_;
+            textClient->quit();
+            delete textClient;
         } else {
             ts_->getSocket()->closeSocket();
-            ts_->deleteLater();
+            delete ts_;
+            textServer->quit();
+            delete textServer;
         }
 
         if(settings->logChat) {
