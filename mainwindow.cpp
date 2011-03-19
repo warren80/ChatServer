@@ -71,6 +71,7 @@ void MainWindow::on_actionExit_triggered() {
 
 void MainWindow::on_actionConnect_triggered() {
     Settings *settingsDiag = new Settings(this);
+    SocketClass *tempSocket;
 
     settingsDiag->exec();
 
@@ -121,6 +122,7 @@ void MainWindow::on_actionConnect_triggered() {
             ts_ = new TextServer(settings->port, BUFSIZE);
             textServer = new Thread();
             textServer->start();
+            tempSocket = ts_->getSocket();
 
             //Setting connections of signals
             connect(this, SIGNAL(startSignalServer()), ts_, SLOT(Start()));
@@ -128,6 +130,10 @@ void MainWindow::on_actionConnect_triggered() {
                     SLOT(error(const char*)));
             connect(ts_, SIGNAL(success(const char*)), this,
                     SLOT(success(const char*)));
+            connect(tempSocket, SIGNAL(signalClientConnected(QString)), this,
+                    SLOT(slotClientActivity(QString)));
+            connect(tempSocket, SIGNAL(signalClientDisconnected(QString)), this,
+                    SLOT(slotClientActivity(QString)));
 
             ts_->moveToThread(textServer);
             emit startSignalServer();
@@ -197,4 +203,8 @@ void MainWindow::closeEvent(QCloseEvent *) {
     if(settings->logChat) {
         saveChat();
     }
+}
+
+void MainWindow::slotClientActivity(QString clientIp) {
+    printF(clientIp);
 }

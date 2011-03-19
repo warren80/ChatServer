@@ -1,8 +1,8 @@
 /********************************************************************************
 ** Form generated from reading UI file 'mainwindow.ui'
 **
-** Created: 
-**      by: Qt User Interface Compiler version 4.6.3
+** Created: Sat Mar 19 12:50:36 2011
+**      by: Qt User Interface Compiler version 4.7.0
 **
 ** WARNING! All changes made in this file will be lost when recompiling UI file!
 ********************************************************************************/
@@ -31,7 +31,6 @@ public:
     QAction *actionDisconnect;
     QAction *actionExit;
     QAction *actionAbout;
-    QAction *actionManual;
     QWidget *centralWidget;
     QPushButton *sendButton;
     QPlainTextEdit *chatScreen;
@@ -39,7 +38,6 @@ public:
     QWidget *widget;
     QMenuBar *menuBar;
     QMenu *menuFile;
-    QMenu *menuHelp;
 
     void setupUi(QMainWindow *MainWindow)
     {
@@ -56,8 +54,6 @@ public:
         actionExit->setObjectName(QString::fromUtf8("actionExit"));
         actionAbout = new QAction(MainWindow);
         actionAbout->setObjectName(QString::fromUtf8("actionAbout"));
-        actionManual = new QAction(MainWindow);
-        actionManual->setObjectName(QString::fromUtf8("actionManual"));
         centralWidget = new QWidget(MainWindow);
         centralWidget->setObjectName(QString::fromUtf8("centralWidget"));
         centralWidget->setMinimumSize(QSize(300, 417));
@@ -93,18 +89,13 @@ public:
         menuBar->setGeometry(QRect(0, 0, 300, 25));
         menuFile = new QMenu(menuBar);
         menuFile->setObjectName(QString::fromUtf8("menuFile"));
-        menuHelp = new QMenu(menuBar);
-        menuHelp->setObjectName(QString::fromUtf8("menuHelp"));
         MainWindow->setMenuBar(menuBar);
 
         menuBar->addAction(menuFile->menuAction());
-        menuBar->addAction(menuHelp->menuAction());
         menuFile->addAction(actionConnect);
         menuFile->addAction(actionDisconnect);
         menuFile->addSeparator();
         menuFile->addAction(actionExit);
-        menuHelp->addAction(actionAbout);
-        menuHelp->addAction(actionManual);
 
         retranslateUi(MainWindow);
 
@@ -120,12 +111,9 @@ public:
         actionDisconnect->setShortcut(QApplication::translate("MainWindow", "Ctrl+D", 0, QApplication::UnicodeUTF8));
         actionExit->setText(QApplication::translate("MainWindow", "Exit", 0, QApplication::UnicodeUTF8));
         actionAbout->setText(QApplication::translate("MainWindow", "About", 0, QApplication::UnicodeUTF8));
-        actionManual->setText(QApplication::translate("MainWindow", "Manual", 0, QApplication::UnicodeUTF8));
-        actionManual->setShortcut(QApplication::translate("MainWindow", "F1", 0, QApplication::UnicodeUTF8));
         sendButton->setText(QApplication::translate("MainWindow", "Send", 0, QApplication::UnicodeUTF8));
         chatScreen->setPlainText(QString());
         menuFile->setTitle(QApplication::translate("MainWindow", "File", 0, QApplication::UnicodeUTF8));
-        menuHelp->setTitle(QApplication::translate("MainWindow", "Help", 0, QApplication::UnicodeUTF8));
     } // retranslateUi
 
 };

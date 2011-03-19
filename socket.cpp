@@ -107,6 +107,11 @@ int SocketClass::TCPServer() {
                                     + " (Connected: " + QTime::currentTime().toString()
                                     + ")"));
 
+           emit signalClientConnected(QString("\nIP: "
+                                              + QString(inet_ntoa(clientAddr.sin_addr))
+                                              + " (Connected: " + QTime::currentTime().toString()
+                                              + ")"));
+
             //some sort of emit here inet_ntoa(clientAddr.sin_addr);
             for (i = 0; i < FD_SETSIZE; ++i) {
                 if (client[i] < 0) {
@@ -161,6 +166,10 @@ int SocketClass::TCPServer() {
                                              + QString(inet_ntoa(clientAddr.sin_addr))
                                              + " (Disconnected: " + QTime::currentTime().toString()
                                              + ")"));
+                    emit signalClientDisconnected(QString("\nIP: "
+                                                          + QString(inet_ntoa(clientAddr.sin_addr))
+                                                          + " (Disconnected: " + QTime::currentTime().toString()
+                                                          + ")"));
                     qDebug("TCPServer(): Connection disconnected %s",
                            inet_ntoa(clientAddr.sin_addr));
                     close(recieveSocketDescriptor);

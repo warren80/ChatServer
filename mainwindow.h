@@ -38,6 +38,7 @@ private:
 
 public slots:
     void slotTextRecieved(MessageStruct *);
+    void slotClientActivity(QString);
 
 private slots:
     void on_actionDisconnect_triggered();

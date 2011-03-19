@@ -59,6 +59,10 @@ private:
     int serverLength_;
     int socketDescriptor_;
 
+signals:
+    void signalClientConnected(QString);
+    void signalClientDisconnected(QString);
+
 };
 
 #endif

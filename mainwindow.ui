@@ -130,15 +130,7 @@ color: black;</string>
     <addaction name="separator"/>
     <addaction name="actionExit"/>
    </widget>
-   <widget class="QMenu" name="menuHelp">
-    <property name="title">
-     <string>Help</string>
-    </property>
-    <addaction name="actionAbout"/>
-    <addaction name="actionManual"/>
-   </widget>
    <addaction name="menuFile"/>
-   <addaction name="menuHelp"/>
   </widget>
   <action name="actionConnect">
    <property name="text">
@@ -164,14 +156,6 @@ color: black;</string>
   <action name="actionAbout">
    <property name="text">
     <string>About</string>
-   </property>
-  </action>
-  <action name="actionManual">
-   <property name="text">
-    <string>Manual</string>
-   </property>
-   <property name="shortcut">
-    <string>F1</string>
    </property>
   </action>
  </widget>
