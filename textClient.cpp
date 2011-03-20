@@ -15,7 +15,7 @@ void TextClient::Start() {
     MessageStruct * rxMesg = new MessageStruct;
 
     if(pSocket_->SetAsClient(ip_) == -1) {
-        emit connectionError("Cannont connect to server.\n Try again later.");
+        emit connectionError("Cannot connect to server.\n Try again later.");
         return;
     } else {
         emit success("Connected to server.");
