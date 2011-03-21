@@ -157,7 +157,9 @@ int SocketClass::TCPServer() {
 
                 //write to all but current fn
                 //
-                writeToEveryoneElse(maxi, client, recieveSocketDescriptor, mesg);
+                if (n != 0) {
+                    writeToEveryoneElse(maxi, client, recieveSocketDescriptor, mesg);
+                }
 
                 //write loop to all clients but this one
                 if (n == 0) //connection closed by client

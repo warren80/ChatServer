@@ -47,6 +47,7 @@ void TextClient::txMessage(const QString str) { //this function is in the gui th
 TextClient::~TextClient() {
     delete ip_;
     delete alias_;
+    pSocket_->closeSocket();
     delete pSocket_;
 }
 

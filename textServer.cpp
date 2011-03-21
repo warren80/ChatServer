@@ -12,6 +12,7 @@ void TextServer::Start() {
 }
 
 TextServer::~TextServer() {
+    pSocket_->closeSocket();
     delete pSocket_;
 }
 
